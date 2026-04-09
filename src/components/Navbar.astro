@@ -1,0 +1,133 @@
+---
+const pathname = Astro.url.pathname;
+
+const navItems = [
+  { label: "Inicio", href: "/", active: pathname === "/" },
+  {
+    label: "Sobre Nosotros",
+    href: "/sobre-nosotros",
+    active: pathname === "/sobre-nosotros",
+  },
+  {
+    label: "Cursos",
+    active: false,
+    children: [
+      {
+        label: "Cursos Online Grabados",
+        href: "https://cursosdeestetica.cl/categoria-producto/cursos-online-grabados/",
+        tone: "recorded",
+      },
+      {
+        label: "Cursos Online Presenciales",
+        href: "https://cursosdeestetica.cl/categoria-producto/cursos-online-presenciales/",
+        tone: "live",
+      },
+    ],
+  },
+  { label: "Noticias", href: "/noticias", active: pathname === "/noticias" },
+  { label: "Contacto", href: "https://cursosdeestetica.cl/contacto/", active: false },
+];
+---
+
+<header class="section nav" aria-label="1 - nav-bar" data-nav-root>
+  <a href="https://cursosdeestetica.cl/" class="logo">
+    <img src="/logo-pablo-ortiz.webp" alt="Pablo Ortiz Cursos de Estetica" />
+  </a>
+
+  <button
+    class="nav-toggle"
+    type="button"
+    aria-label="Abrir menu"
+    aria-expanded="false"
+    aria-controls="main-menu"
+    data-nav-toggle
+  >
+    <span class="nav-toggle-line"></span>
+    <span class="nav-toggle-line"></span>
+    <span class="nav-toggle-line"></span>
+  </button>
+
+  <nav class="menu" id="main-menu" aria-label="Navegacion principal" data-nav-menu>
+    {navItems.map((item) => (
+      item.children ? (
+        <div class="menu-dropdown">
+          <button
+            class={item.active ? "menu-pill menu-button is-active" : "menu-pill menu-button"}
+            type="button"
+            aria-haspopup="true"
+          >
+            {item.label}
+            <span class="caret" aria-hidden="true">▾</span>
+          </button>
+          <div class="dropdown-panel">
+            {item.children.map((child) => (
+              <a class={`dropdown-item ${child.tone === "live" ? "is-live" : "is-recorded"}`} href={child.href}>
+                {child.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <a class={item.active ? "menu-pill is-active" : "menu-pill"} href={item.href}>
+          {item.label}
+        </a>
+      )
+    ))}
+  </nav>
+
+  <a class="nav-cta" href="https://aula.cursosdeestetica.cl/" data-nav-cta>
+    <span>Aula Virtual</span>
+    <span class="nav-cta-icon" aria-hidden="true">↗</span>
+  </a>
+</header>
+
+<script is:inline>
+  const navRoots = document.querySelectorAll("[data-nav-root]");
+
+  navRoots.forEach((root) => {
+    const toggle = root.querySelector("[data-nav-toggle]");
+    const menu = root.querySelector("[data-nav-menu]");
+    const cta = root.querySelector("[data-nav-cta]");
+
+    if (!toggle || !menu || !cta) return;
+
+    const closeMenu = () => {
+      root.classList.remove("is-open");
+      toggle.setAttribute("aria-expanded", "false");
+    };
+
+    const openMenu = () => {
+      root.classList.add("is-open");
+      toggle.setAttribute("aria-expanded", "true");
+    };
+
+    toggle.addEventListener("click", () => {
+      const expanded = toggle.getAttribute("aria-expanded") === "true";
+      if (expanded) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!root.classList.contains("is-open")) return;
+      if (!(event.target instanceof Node)) return;
+      if (!root.contains(event.target)) {
+        closeMenu();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeMenu();
+      }
+    });
+
+    menu.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        closeMenu();
+      });
+    });
+  });
+</script>

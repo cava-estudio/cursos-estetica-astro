@@ -1,0 +1,279 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+
+const masVendidos = [
+  {
+    titulo: "CrioLipo",
+    href: "https://cursosdeestetica.cl/producto/criolipo-2/",
+    image: "/criolipo.webp",
+    imagePosition: "center",
+    wide: true,
+  },
+  {
+    titulo: "Criolipólisis de placa",
+    href: "https://cursosdeestetica.cl/producto/criolipolisis-de-placa/",
+    image: "/criolipolisis-de-placa.webp",
+    imagePosition: "center",
+    wide: false,
+  },
+];
+
+const cursos = [
+  {
+    titulo: "CrioLipo",
+    tituloMedia: "CrioLipo",
+    image: "/1-curso.webp",
+    descripcion: "Curso criolipotratamiento avanzado para reducción de tejido graso localizado.",
+    precioAnterior: "$600.000",
+    precioActual: "$450.000",
+    tieneOferta: true,
+    href: "https://cursosdeestetica.cl/producto/criolipo-2/",
+  },
+  {
+    titulo: "Criolipólisis de placas",
+    tituloMedia: "Criolipólisis de placa",
+    image: "/2-curso.webp",
+    descripcion: "Técnicas estáticas y dinámicas para lograr reducción y reafirmación corporal.",
+    precioActual: "$140.000",
+    tieneOferta: false,
+    href: "https://cursosdeestetica.cl/producto/criolipolisis-de-placa/",
+  },
+  {
+    titulo: "Criolipólisis Expert",
+    tituloMedia: "Criolipólisis Expert",
+    image: "/3-curso.webp",
+    descripcion: "Conviértete en experto con la formación más completa en criolipólisis.",
+    precioAnterior: "$1.200.000",
+    precioActual: "$850.000",
+    tieneOferta: true,
+    href: "https://cursosdeestetica.cl/producto/criolipolisis-expert/",
+  },
+  {
+    titulo: "Secretos de Criolipólisis",
+    tituloMedia: "Secretos de Criolipólisis",
+    image: "/4-curso.webp",
+    descripcion: "Gana seguridad y domina la técnica para transformarte en un verdadero experto en el área.",
+    precioActual: "$80.000",
+    tieneOferta: false,
+    colorFondoTitulo: "#CE63CE",
+    colorElipse: "#CB62CE",
+    href: "https://cursosdeestetica.cl/producto/curso-secretos-de-criolipolisis/",
+  },
+  {
+    titulo: "Curso Tratamiento Criofacial Fusión Multicapa",
+    tituloMedia: "Tratamiento Criofacial Fusión Multicapa",
+    image: "/5-curso.webp",
+    descripcion:
+      "Curso de rejuvenecimiento facial no invasivo, efectivo e indoloro que combina tensado, bioestimulación y reducción de grasa.",
+    precioAnterior: "$300.000",
+    precioActual: "$200.000",
+    tieneOferta: true,
+    colorFondoTitulo: "#CE63CE",
+    colorElipse: "#CB62CE",
+    href: "https://cursosdeestetica.cl/producto/curso-tratamiento-criofacial-fusion-multicapa/",
+  },
+  {
+    titulo: "Tecnologías para Grasa Localizada",
+    tituloMedia: "Tecnologías para Grasa Localizada",
+    image: "/6-curso.webp",
+    descripcion: "Curso para reducir grasa localizada con resultados efectivos.",
+    precioActual: "$110.000",
+    tieneOferta: false,
+    colorFondoTitulo: "#CE63CE",
+    colorElipse: "#CB62CE",
+    href: "https://cursosdeestetica.cl/producto/tecnologias-para-grasa-localizada/",
+  },
+  {
+    titulo: "Ultrasonido Micro Focalizados Mfus y Hifu",
+    tituloMedia: "Ultrasonido Micro Focalizados Mfus y Hifu",
+    image: "/7-curso.webp",
+    descripcion: "Ultrasonido para rejuvenecimiento y grasa, dependiente del operador.",
+    precioActual: "$80.000",
+    tieneOferta: false,
+    colorFondoTitulo: "#C4CFDA",
+    colorElipse: "#C4CFDA",
+    colorTextoTitulo: "#FFFFFF",
+    colorIcono: "#FFFFFF",
+    href: "https://cursosdeestetica.cl/producto/ultrasonidos-micro-focalizados-mfus-y-hifu/",
+  },
+  {
+    titulo: "Prevención y Manejo de Complicaciones en Criolipólisis",
+    tituloMedia: "Prevención y Manejo de Complicaciones en Criolipólisis",
+    image: "/8-curso.webp",
+    descripcion: "Curso para prevenir y manejar complicaciones con seguridad y eficacia.",
+    precioActual: "$80.000",
+    tieneOferta: false,
+    colorFondoTitulo: "#C4CFDA",
+    colorElipse: "#C4CFDA",
+    colorTextoTitulo: "#FFFFFF",
+    colorIcono: "#FFFFFF",
+    href: "https://cursosdeestetica.cl/producto/curso-prevencion-y-manejo-de-complicaciones-con-criolipolisis/",
+  },
+  {
+    titulo: "Depilación Laser Teórico y Practico demostrativo",
+    tituloMedia: "Depilación Laser Teórico y Practico demostrativo",
+    image: "/9-curso-1.webp",
+    descripcion: "Curso de depilación láser y termólisis selectiva para lograr depilación definitiva.",
+    precioActual: "$60.000",
+    tieneOferta: false,
+    colorFondoTitulo: "#C4CFDA",
+    colorElipse: "#C4CFDA",
+    colorTextoTitulo: "#FFFFFF",
+    colorIcono: "#FFFFFF",
+    href: "https://cursosdeestetica.cl/producto/depilacion-laser-teorico-y-practico-demostrativo/",
+  },
+];
+
+const heroTags = [
+  { label: "Criolipolisis", dark: false },
+  { label: "Reduccion corporal", dark: true },
+  { label: "Tratamientos faciales avanzados", dark: true },
+  { label: "Depilacion laser", dark: false },
+];
+---
+
+<MainLayout title="Cursos de Estetica | Antigravity">
+<section class="section hero" aria-label="2 - hero">
+          <img class="hero-bg" src="/hero-pablo-ortiz.webp" alt="Tratamiento estetico facial" />
+          <div class="hero-overlay" aria-hidden="true"></div>
+
+          <div class="hero-content">
+            <h1>
+              <span class="hero-title-main">¡Bienvenidos!</span>
+              <span class="hero-title-sub">A nuestros Cursos de Estética</span>
+            </h1>
+
+            <svg class="hero-line" viewBox="0 0 258 46" aria-hidden="true" focusable="false">
+              <path d="M7 36 C 27 28, 42 16, 61 11 C 71 8, 84 12, 90 22 C 96 33, 96 39, 106 40 C 133 42, 158 28, 185 24 C 207 20, 229 23, 251 31" />
+            </svg>
+
+            <p>
+              Aquí encontrarás cursos de calidad, impartidos por profesores
+              especialistas y con amplia experiencia clínica.
+            </p>
+
+            <div class="hero-tags">
+              {heroTags.map((tag) => (
+                <a class={tag.dark ? "hero-tag is-dark" : "hero-tag"} href="#cursos">{tag.label}</a>
+              ))}
+            </div>
+          </div>
+
+          <div class="hero-corner-logo">
+            <img src="/logo-cursos-estetica.png" alt="Logo Cursos de Estetica" />
+          </div>
+        </section>
+
+        <section class="section banner banner-one" aria-label="3 - banner-uno">
+          <div class="banner-track" aria-label="Texto continuo cursos de estetica">
+            <span>CURSOS DE ESTÉTICA</span>
+            <span>CURSOS DE ESTÉTICA</span>
+            <span>CURSOS DE ESTÉTICA</span>
+            <span>CURSOS DE ESTÉTICA</span>
+            <span>CURSOS DE ESTÉTICA</span>
+          </div>
+        </section>
+
+        <section class="section vendidos" id="mas-vendidos" aria-label="4 - seccion-mas-vendidos">
+          <div class="vendidos-heading">
+            <span class="vendidos-mark" aria-hidden="true"></span>
+            <h2>Más vendidos</h2>
+          </div>
+
+          <div class="cards cards-featured">
+            {masVendidos.map((curso) => (
+              <article class={curso.wide ? "featured-card is-wide" : "featured-card"}>
+                <img src={curso.image} alt={curso.titulo} style={`object-position:${curso.imagePosition};`} />
+                <div class="featured-overlay" aria-hidden="true"></div>
+
+                <span class="featured-pill">Destacado</span>
+
+                <div class="featured-content">
+                  <h3>{curso.titulo}</h3>
+                  <a href={curso.href} class="featured-link">
+                    <span>Ver más</span>
+                    <span class="featured-link-icon" aria-hidden="true">↗</span>
+                  </a>
+                </div>
+
+                <div class="featured-seal" aria-hidden="true">
+                  <span class="seal-icon"></span>
+                  <span>Más vendidos</span>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section class="section banner banner-two" aria-label="5 - banner-dos">
+          <div class="banner-two-content">
+            <p class="eyebrow">Aprendizaje con impacto</p>
+            <h3>
+              Contenido clinico actualizado para perfeccionar tu practica
+              estetica, potenciar resultados y fortalecer tu posicionamiento
+              profesional.
+            </h3>
+          </div>
+          <div class="banner-two-logo">
+            <img src="/logo-cursos-estetica-dos.png" alt="Logo Cursos de Estetica" />
+          </div>
+        </section>
+
+        <section class="section cursos" id="cursos" aria-label="6 - cursos">
+          <div class="cursos-header">
+            <h2>Cursos</h2>
+            <p>Explora nuestro catálogo de cursos y encuentra la formación ideal para ti.</p>
+            <svg class="cursos-line" viewBox="0 0 258 46" aria-hidden="true" focusable="false">
+              <path d="M7 36 C 27 28, 42 16, 61 11 C 71 8, 84 12, 90 22 C 96 33, 96 39, 106 40 C 133 42, 158 28, 185 24 C 207 20, 229 23, 251 31" />
+            </svg>
+          </div>
+
+          <span class="cursos-dot cursos-dot-left" aria-hidden="true"></span>
+          <span class="cursos-dot cursos-dot-right" aria-hidden="true"></span>
+
+          <div class="cursos-ornaments" aria-hidden="true">
+            <span class="ornament ornament-1"></span>
+            <span class="ornament ornament-2"></span>
+            <span class="ornament ornament-3"></span>
+            <span class="ornament ornament-4"></span>
+          </div>
+
+          <div class="grid-cursos">
+            {cursos.map((curso) => (
+              <article class="curso-item">
+                <div class="curso-media">
+                  <img src={curso.image} alt={curso.titulo} loading="lazy" />
+                  {curso.tieneOferta && <span class="curso-offer">&iexcl;Oferta!</span>}
+                  <div
+                    class="curso-media-title"
+                    style={`background: ${curso.colorFondoTitulo ?? "#704fe6"}; color: ${curso.colorTextoTitulo ?? "#ffffff"};`}
+                  >
+                    {curso.tituloMedia ?? curso.titulo}
+                  </div>
+                </div>
+
+                <div class="curso-body">
+                  <h3>{curso.titulo}</h3>
+                  <p>{curso.descripcion}</p>
+
+                  <div class="curso-meta">
+                    <div class="curso-prices">
+                      {curso.precioAnterior && <span class="price-old">{curso.precioAnterior}</span>}
+                      <span class="price-now">{curso.precioActual}</span>
+                    </div>
+
+                    <a
+                      href={curso.href}
+                      class="curso-buy"
+                      style={`background: ${curso.colorElipse ?? "#704fe6"}; color: ${curso.colorIcono ?? "#ffffff"};`}
+                      aria-label={`Ver ${curso.titulo}`}
+                    >
+                      <span aria-hidden="true">↗</span>
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+</MainLayout>

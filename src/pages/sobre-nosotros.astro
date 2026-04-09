@@ -1,0 +1,568 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import { GraduationCap, Handshake, LifeBuoy, UserCheck, BriefcaseMedical, ShieldCheck, CheckCircle2 } from "@lucide/astro";
+---
+
+<MainLayout title="Sobre Nosotros | Cursos de Estetica">
+  <section class="about-page pt-32">
+    <div class="about-bg-decor" aria-hidden="true">
+      <span class="about-shape about-shape-dot"></span>
+      <span class="about-shape about-shape-orb about-shape-orb-left"></span>
+      <span class="about-shape about-shape-orb"></span>
+    </div>
+
+    <section class="about-hero section" aria-label="Hero Sobre Nosotros">
+      <img src="/nosotros-uno.webp" alt="Pablo Ortiz en entorno clinico" class="about-hero-bg" />
+      <div class="about-hero-overlay"></div>
+      <div class="about-hero-content">
+        <p class="about-kicker">Sobre Nosotros</p>
+        <h1>Liderazgo técnico en medicina estética y tecnología avanzada.</h1>
+        <p class="about-lead">
+          Formación profesional de alto impacto bajo la metodología de Pablo Ortiz,
+          diseñada para especialistas que buscan resultados clínicos excepcionales y
+          seguridad en cada protocolo.
+        </p>
+      </div>
+    </section>
+
+    <section class="about-content max-w-3xl">
+      <section class="about-text-zone" aria-label="Que es, mision y trayectoria">
+        <article class="about-block about-intro-block">
+          <h2 class="about-intro-title">¿Qué es Cursos de Estética?</h2>
+          <p>
+            Soy kinesiólogo y me dedico al área estética. Dirijo una clínica donde
+            atendemos pacientes y, desde hace varios años, imparto cursos
+            especializados en temáticas vinculadas a mi rubro.
+            Desarrollo formación presencial y online, y hoy estamos incorporando
+            cursos online grabados para ampliar el acceso y el aprendizaje continuo.
+          </p>
+        </article>
+
+        <article class="about-block">
+          <h2 class="about-intro-title">Nuestra Misión</h2>
+          <p>
+            Profesionalizar la estética en Chile con formación técnica avanzada,
+            accesible y aplicable en cabina. Impulsamos una práctica basada en
+            evidencia, protocolos clínicos seguros y visión de crecimiento
+            sostenible para cada profesional.
+          </p>
+        </article>
+
+        <article class="about-block">
+          <h2 class="about-intro-title">Trayectoria</h2>
+          <p>
+            Pablo Ortiz es el referente detrás de Cursos de Estética, una plataforma
+            dedicada a la profesionalización del sector. Su enfoque se centra en
+            democratizar el conocimiento técnico avanzado para dominar tecnologías
+            complejas, desde la termólisis selectiva hasta la bioestimulación
+            multicapa, con confianza y precisión.
+          </p>
+          <p>
+            No solo entregamos teoría; entregamos herramientas concretas para
+            transformar tu cabina en un centro de resultados de alta rentabilidad.
+          </p>
+        </article>
+      </section>
+
+      <section class="values-banner" aria-label="Nuestros valores y beneficios">
+        <div class="values-header">
+          <p class="values-kicker">Formacion con criterio</p>
+          <h2>Nuestros Valores y Beneficios</h2>
+        </div>
+
+        <div class="values-grid">
+          <article class="value-item">
+            <span class="value-icon" aria-hidden="true"><Handshake size={26} /></span>
+            <p>Compromiso con los alumnos</p>
+          </article>
+          <article class="value-item">
+            <span class="value-icon" aria-hidden="true"><UserCheck size={26} /></span>
+            <p>Acceso real y directo al profesor</p>
+          </article>
+          <article class="value-item">
+            <span class="value-icon" aria-hidden="true"><LifeBuoy size={26} /></span>
+            <p>Soporte post curso</p>
+          </article>
+          <article class="value-item">
+            <span class="value-icon" aria-hidden="true"><BriefcaseMedical size={26} /></span>
+            <p>Experiencia</p>
+          </article>
+          <article class="value-item">
+            <span class="value-icon" aria-hidden="true"><GraduationCap size={26} /></span>
+            <p>Docentes de Calidad</p>
+          </article>
+          <article class="value-item">
+            <span class="value-icon" aria-hidden="true"><ShieldCheck size={26} /></span>
+            <p>Calidad Tecnica</p>
+          </article>
+        </div>
+      </section>
+
+      <article class="about-benefits section">
+        <h3>El sello de formacion</h3>
+        <p class="about-benefits-intro">
+          Una metodología orientada a resultados clínicos, con protocolos claros,
+          acompañamiento experto y aplicación inmediata en cabina.
+        </p>
+        <ul>
+          <li>
+            <span class="benefit-icon" aria-hidden="true"><CheckCircle2 size={16} /></span>
+            <span><strong>Excelencia Academica:</strong> Programas basados en evidencia y práctica clínica real.</span>
+          </li>
+          <li>
+            <span class="benefit-icon" aria-hidden="true"><CheckCircle2 size={16} /></span>
+            <span><strong>Innovacion Tecnologica:</strong> Dominio de equipos de vanguardia como Criolipólisis, HIFU y Láser.</span>
+          </li>
+          <li>
+            <span class="benefit-icon" aria-hidden="true"><CheckCircle2 size={16} /></span>
+            <span><strong>Seguridad y Etica:</strong> Prevención y manejo de complicaciones para una práctica responsable.</span>
+          </li>
+        </ul>
+      </article>
+
+      <section class="about-gallery" aria-label="Imagenes de apoyo sobre nosotros">
+        <img src="/pablo-principal.jpg" alt="Pablo Ortiz" class="about-gallery-main" />
+        <img src="/pablo-2-quienes-somos.jpg" alt="Formacion practica en estetica" />
+        <img src="/nosotros-dos.webp" alt="Entrenamiento clinico especializado" />
+      </section>
+
+      <section class="about-cta section">
+        <h3>¡Eleva tu formación y crece sin límites!</h3>
+        <a href="/#cursos" class="about-cta-btn">Ver Cursos Disponibles</a>
+        <p>Inscríbete en nuestros cursos para alcanzar tus objetivos.</p>
+      </section>
+    </section>
+  </section>
+</MainLayout>
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
+  .pt-32 {
+    padding-top: 3.5rem;
+  }
+
+  .about-page {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    gap: 30px;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    margin-bottom: -14px;
+    padding-bottom: 0;
+    overflow: hidden;
+  }
+
+  .about-page::before,
+  .about-page::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .about-page::before {
+    inset: 180px 0 0;
+    border-radius: 0;
+    background:
+      radial-gradient(circle at 12% 22%, rgba(112, 79, 230, 0.11), transparent 36%),
+      radial-gradient(circle at 90% 82%, rgba(203, 98, 206, 0.11), transparent 34%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(249, 246, 255, 0.95));
+  }
+
+  .about-page::after {
+    width: 150px;
+    height: 150px;
+    right: -58px;
+    top: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(112, 79, 230, 0.16), rgba(112, 79, 230, 0));
+  }
+
+  .about-bg-decor {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .about-shape {
+    position: absolute;
+    display: block;
+  }
+
+  .about-shape-dot {
+    width: 104px;
+    height: 104px;
+    top: clamp(520px, 46vw, 620px);
+    right: 14%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(206, 99, 206, 0.2), rgba(206, 99, 206, 0));
+  }
+
+  .about-shape-orb {
+    width: 72px;
+    height: 72px;
+    top: clamp(600px, 53vw, 700px);
+    right: 7%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(112, 79, 230, 0.14), rgba(112, 79, 230, 0));
+  }
+
+  .about-shape-orb-left {
+    width: 88px;
+    height: 88px;
+    top: clamp(500px, 43vw, 600px);
+    left: 6%;
+    right: auto;
+    background: radial-gradient(circle, rgba(112, 79, 230, 0.18), rgba(112, 79, 230, 0));
+  }
+
+  .about-hero {
+    position: relative;
+    min-height: 520px;
+    overflow: hidden;
+    border-radius: 0;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    box-shadow: none;
+  }
+
+  .about-hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .about-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, rgba(34, 26, 62, 0.86), rgba(34, 26, 62, 0.22));
+  }
+
+  .about-hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    padding: 52px clamp(18px, 4vw, 54px);
+    color: #fff;
+    font-family: "Plus Jakarta Sans", "Quicksand", sans-serif;
+  }
+
+  .about-kicker {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #d7c7ff;
+  }
+
+  .about-hero h1 {
+    margin: 12px 0 0;
+    font-size: clamp(1.8rem, 4vw, 3.1rem);
+    line-height: 1.14;
+    font-weight: 800;
+  }
+
+  .about-lead {
+    margin: 16px 0 0;
+    font-size: clamp(1rem, 1.45vw, 1.22rem);
+    line-height: 1.62;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .max-w-3xl {
+    width: min(860px, 100%);
+    margin-inline: auto;
+  }
+
+  .values-banner {
+    width: 100%;
+    margin-inline: auto;
+    margin-top: 12px;
+    margin-bottom: 8px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  .values-header {
+    display: grid;
+    gap: 8px;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .values-kicker {
+    margin: 0;
+    color: #6f4ce4;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    font-size: 0.76rem;
+    font-weight: 700;
+  }
+
+  .values-header h2 {
+    margin: 0;
+    color: #2a2637;
+    font-size: clamp(1.4rem, 2.6vw, 2rem);
+  }
+
+  .values-grid {
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .value-item {
+    min-height: 116px;
+    border-radius: 14px;
+    border: 1px solid #e4d9fd;
+    background: #ffffff;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 10px;
+    text-align: center;
+    padding: 14px 12px;
+  }
+
+  .value-icon {
+    color: #704fe6;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .value-item p {
+    margin: 0;
+    color: #4a4560;
+    font-size: 0.92rem;
+    line-height: 1.35;
+  }
+
+  .about-content {
+    position: relative;
+    display: grid;
+    gap: 30px;
+    margin-top: 30px;
+    font-family: "Plus Jakarta Sans", "Quicksand", sans-serif;
+    z-index: 1;
+  }
+
+  .about-text-zone {
+    display: grid;
+    gap: 30px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .about-block + .about-block,
+  .values-banner,
+  .about-benefits {
+    margin-top: 30px;
+  }
+
+  .about-block {
+    display: grid;
+    gap: 14px;
+  }
+
+  .about-block h2 {
+    margin: 0;
+    font-size: clamp(1.35rem, 2.2vw, 2rem);
+    color: #2a2637;
+    text-align: center;
+  }
+
+  .about-intro-title {
+    color: #704fe6;
+    font-size: clamp(1.6rem, 2.7vw, 2.3rem);
+  }
+
+  .about-block p {
+    margin: 0;
+    font-size: 1.04rem;
+    line-height: 1.74;
+    color: #54516a;
+  }
+
+  .about-benefits {
+    position: relative;
+    z-index: 1;
+    padding: 24px;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    display: grid;
+    gap: 14px;
+  }
+
+  .about-benefits h3 {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #5f43cc;
+    font-size: 1.33rem;
+    text-align: center;
+  }
+
+  .about-benefits ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 12px;
+    color: #403d52;
+    line-height: 1.5;
+  }
+
+  .about-benefits-intro {
+    margin: 0;
+    color: #514b68;
+    line-height: 1.66;
+  }
+
+  .about-benefits li {
+    display: grid;
+    grid-template-columns: 20px minmax(0, 1fr);
+    align-items: start;
+    gap: 10px;
+  }
+
+  .benefit-icon {
+    color: #704fe6;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(2px);
+  }
+
+  .about-gallery {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .about-gallery img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 1px solid #e6e1f5;
+  }
+
+  .about-gallery-main {
+    object-position: center 18%;
+  }
+
+  .about-cta {
+    position: relative;
+    z-index: 1;
+    padding: 22px;
+    background: transparent;
+    color: #2a2637;
+    border: 0;
+    box-shadow: none;
+    display: grid;
+    gap: 12px;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .about-cta h3 {
+    margin: 0;
+    color: #2a2637;
+    font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+    line-height: 1.15;
+    text-align: center;
+  }
+
+  .about-cta-btn {
+    text-decoration: none;
+    background: #704fe6;
+    color: #ffffff;
+    border-radius: 999px;
+    min-height: 44px;
+    padding: 10px 18px;
+    font-weight: 700;
+  }
+
+  .about-cta p {
+    margin: 0;
+    color: #2a2637;
+    font-weight: 700;
+  }
+
+  @media (max-width: 860px) {
+    .pt-32 {
+      padding-top: 2.6rem;
+    }
+
+    .about-hero {
+      min-height: 460px;
+    }
+
+    .values-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .about-text-zone {
+      gap: 24px;
+    }
+
+    .about-page::before {
+      inset: 160px 0 0;
+    }
+
+    .about-page::after {
+      right: -34px;
+      top: 240px;
+    }
+
+    .about-shape-dot {
+      width: 94px;
+      height: 94px;
+      top: 500px;
+      right: 8%;
+    }
+
+    .about-shape-orb {
+      width: 62px;
+      height: 62px;
+      top: 560px;
+      right: 6%;
+    }
+
+    .about-shape-orb-left {
+      width: 72px;
+      height: 72px;
+      top: 468px;
+      left: 2%;
+      right: auto;
+    }
+
+    .about-gallery {
+      grid-template-columns: 1fr;
+    }
+
+    .about-gallery img {
+      height: 240px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .values-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
