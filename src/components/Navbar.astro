@@ -48,18 +48,21 @@ const navItems = [
   </button>
 
   <nav class="menu" id="main-menu" aria-label="Navegacion principal" data-nav-menu>
-    {navItems.map((item) => (
+    {navItems.map((item, index) => (
       item.children ? (
         <div class="menu-dropdown">
           <button
             class={item.active ? "menu-pill menu-button is-active" : "menu-pill menu-button"}
             type="button"
             aria-haspopup="true"
+            aria-expanded="false"
+            aria-controls={`menu-dropdown-${index}`}
+            data-dropdown-toggle
           >
             {item.label}
             <span class="caret" aria-hidden="true">▾</span>
           </button>
-          <div class="dropdown-panel">
+          <div class="dropdown-panel" id={`menu-dropdown-${index}`} data-dropdown-panel>
             {item.children.map((child) => (
               <a class={`dropdown-item ${child.tone === "live" ? "is-live" : "is-recorded"}`} href={child.href}>
                 {child.label}
@@ -94,6 +97,10 @@ const navItems = [
     const closeMenu = () => {
       root.classList.remove("is-open");
       toggle.setAttribute("aria-expanded", "false");
+      root.querySelectorAll("[data-dropdown-toggle]").forEach((btn) => {
+        btn.setAttribute("aria-expanded", "false");
+        btn.closest(".menu-dropdown")?.classList.remove("is-expanded");
+      });
     };
 
     const openMenu = () => {
@@ -108,6 +115,25 @@ const navItems = [
       } else {
         openMenu();
       }
+    });
+
+    root.querySelectorAll("[data-dropdown-toggle]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const container = btn.closest(".menu-dropdown");
+        if (!container) return;
+
+        const willExpand = btn.getAttribute("aria-expanded") !== "true";
+
+        root.querySelectorAll("[data-dropdown-toggle]").forEach((otherBtn) => {
+          otherBtn.setAttribute("aria-expanded", "false");
+          otherBtn.closest(".menu-dropdown")?.classList.remove("is-expanded");
+        });
+
+        if (willExpand) {
+          btn.setAttribute("aria-expanded", "true");
+          container.classList.add("is-expanded");
+        }
+      });
     });
 
     document.addEventListener("click", (event) => {
