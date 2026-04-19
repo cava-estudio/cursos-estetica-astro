@@ -1,0 +1,251 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const curso = {
+  titulo: 'Depilación Láser Teórico y Práctico Demostrativo',
+  precioOriginal: 60000, // No hay precio tachado/oferta en fuente
+  precioOferta: 60000,
+  imagen: '/9-curso-1.webp',
+  breve: `La depilación láser funciona por termólisis selectiva, donde por un estímulo lumínico (haz de láser) es posible llegar a los cromóforos contenidos en el folículo piloso y generar en él una pequeña lesión controlada. Esta lesión produce muerte del folículo generando depilación definitiva. ¿Quieres saber más? No dejes pasar este maravilloso curso que hemos preparado para tu crecimiento profesional.`,
+  categorias: ['Cursos Online', 'Cursos Online Grabados'],
+  temario: [
+    '¿Qué es un láser?',
+    '¿Cómo se genera?',
+    'Tipos de láser de depilación',
+    'Anatomía macroscópica de la piel',
+    'Termólisis Selectiva',
+    'Cromóforos',
+    'Fototipos de piel',
+    'Indicaciones',
+    'Contraindicaciones',
+    'Depilación láser masculina y femenina',
+    'Selección del paciente',
+    'Planificación terapéutica',
+    'Protocolo de tratamiento',
+    'Indicaciones post tratamiento',
+    'Efectos adversos y prevención',
+    'Aspectos comerciales',
+    'Y mucho más.'
+  ],
+  descripcion: `La Depilación láser pasó de ser un lujo a una necesidad en prácticamente el 70% de las mujeres y el 25% de los varones a nivel mundial. Esta necesidad radica en la seguridad, efectividad, incomodidad de métodos tradicionales y el deseo de lucir una piel radiante.\n\nEl curso online es el mismo que hacemos de forma presencial, sólo que el módulo práctico es demostrativo, pero la calidad del aprendizaje es excelente.\n\nEn este curso aprenderás todo lo necesario para realizar un procedimiento seguro y efectivo, desde la selección y evaluación del paciente hasta la aplicación e indicaciones post tratamiento.\n\nInversión vs Retorno: Es uno de los tratamientos más rentables que puedes realizar. La inversión total puedes recuperarla rápido. Los insumos son de bajo costo y puedes generar alto volumen de pacientes, incluso dedicarte solo a depilación láser si lo deseas.`,
+  relacionados: [
+    {
+      titulo: 'Método CrioLipo Placas',
+      imagen: '/Copia-de-Copia-de-Copia-de-Copia-de-Curso-Mfus-300x300.png',
+      precio: 350000,
+      url: '/productos/metodo-criolipo-placas',
+    },
+    {
+      titulo: 'Curso Tratamiento Criofacial Fusión Multicapa',
+      imagen: '/5-curso.webp',
+      precio: 200000,
+      url: '/productos/criofacial-fusion-multicapa',
+    },
+    {
+      titulo: 'Prevención y Manejo de Complicaciones en Criolipólisis',
+      imagen: '/2-300x300.png',
+      precio: 80000,
+      url: '/productos/curso-prevencion-y-manejo-de-complicaciones-con-criolipolisis',
+    },
+    {
+      titulo: 'Secretos de Criolipólisis',
+      imagen: '/1-300x300.png',
+      precio: 80000,
+      url: '/productos/curso-secretos-de-criolipolisis',
+    },
+  ],
+};
+---
+
+<MainLayout>
+<main class="curso-main">
+  <section class="curso-header">
+    <div class="curso-img-wrap">
+      <img src={curso.imagen} alt={curso.titulo} class="curso-img" />
+    </div>
+    <div class="curso-info">
+      <h1>{curso.titulo}</h1>
+      <div class="curso-precios">
+        <span class="precio-oferta">${curso.precioOferta.toLocaleString('es-CL')}</span>
+      </div>
+      <div class="curso-breve">{curso.breve}</div>
+      <div class="curso-cart">
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="cantidad" name="cantidad" min="1" value="1" class="counter-input" />
+        <button class="add-cart-cta">Añadir al carrito</button>
+      </div>
+      <div class="curso-categorias">
+        {curso.categorias.map(cat => <span class="cat">{cat}</span>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="curso-desc">
+    <h2>Descripción del curso</h2>
+    <p>{curso.descripcion}</p>
+  </section>
+  <section class="curso-temario">
+    <h2>Temario</h2>
+    <ul>
+      {curso.temario.map(item => <li>{item}</li>)}
+    </ul>
+  </section>
+  <section class="curso-rel">
+    <h2>Productos relacionados</h2>
+    <div class="rel-grid">
+      {curso.relacionados.map((prod) => (
+        <a href={prod.url} class="rel-card">
+          <img src={prod.imagen} alt={prod.titulo} />
+          <div>{prod.titulo}</div>
+          <span class="rel-precio">${prod.precio.toLocaleString('es-CL')}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</main>
+
+<style>
+:root {
+  --color-principal: #704fe6;
+}
+.curso-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2em 1em;
+}
+.curso-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2em;
+  align-items: flex-start;
+}
+.curso-img-wrap {
+  flex: 1 1 350px;
+  min-width: 250px;
+  text-align: center;
+}
+.curso-img {
+  max-width: 340px;
+  width: 100%;
+  border-radius: 2em;
+  box-shadow: 0 4px 32px 0 #8edfec22;
+}
+.curso-info {
+  min-width: 300px;
+  flex: 2 1 450px;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.curso-precios {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+.precio-oferta {
+  color: var(--color-principal);
+}
+.curso-breve {
+  margin-top: 0.2em;
+  margin-bottom: 0.8em;
+  color: #353535;
+}
+.curso-cart {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  margin-top: 1em;
+}
+.curso-categorias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2em 0.4em;
+  margin-bottom: 0.7em;
+}
+.curso-categorias .cat {
+  background: #efecfd;
+  color: var(--color-principal);
+  border-radius: 1em;
+  padding: 0.2em 1em;
+  font-size: 0.95em;
+  white-space: pre-line;
+  word-break: break-word;
+}
+.curso-temario ul {
+  margin: 0 0 1.2em 0;
+  padding-left: 1.3em;
+  line-height: 1.7em;
+  color: #353535;
+}
+.curso-temario li {
+  margin-bottom: 0.15em;
+  list-style: disc inside;
+}
+.counter-input {
+  width: 50px;
+  text-align: center;
+  border: 1px solid #c8f3fc;
+  border-radius: 5px;
+}
+.add-cart-cta {
+  background: var(--color-principal);
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 2em;
+  padding: 0.7em 2em;
+  font-size: 1.2em;
+  box-shadow: 0 2px 10px #a48afd40;
+  cursor: pointer;
+  transition: transform 0.08s;
+}
+.add-cart-cta:hover {
+  transform: scale(1.04);
+  box-shadow: 0 4px 24px #a48afd40;
+}
+.curso-desc {
+  margin: 3em 0 2em 0;
+}
+.curso-rel .rel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+  gap: 1.2em;
+}
+.rel-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fcfeff;
+  border-radius: 1.2em;
+  box-shadow: 0 2px 10px #c8f3fc33;
+  padding: 1em;
+  text-decoration: none;
+  color: #222;
+  transition: box-shadow 0.16s;
+}
+.rel-card:hover {
+  box-shadow: 0 3px 20px #00c5dc33;
+}
+.rel-card img {
+  max-width: 120px;
+}
+.rel-precio {
+  font-weight: bold;
+  margin-top: 0.3em;
+  color: #24afbc;
+}
+@media (max-width: 900px) {
+  .curso-header { flex-direction: column; gap: 2em; }
+  .curso-img-wrap, .curso-info { min-width: unset; width: 100%; }
+}
+@media (max-width: 600px) {
+  .curso-cart label[for="cantidad"] { display: none; }
+  .curso-cart {
+    justify-content: center;
+  }
+  .curso-categorias .cat {
+    font-size: 0.83em;
+    margin-bottom: 0.21em;
+    padding: 0.2em 0.8em;
+  }
+}
+</style>

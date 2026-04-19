@@ -1,0 +1,77 @@
+++ ---
+import MainLayout from '../layouts/MainLayout.astro';
+
+---
+
+<MainLayout title="Gracias">
+  <main class="thank-you" role="main">
+    <article class="panel" aria-labelledby="thanks-title">
+      <div class="icon" aria-hidden="true">
+        <!-- Check SVG -->
+        <svg width="72" height="72" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="11" stroke="white" stroke-opacity="0.06" fill="none" />
+          <path d="M20 7L9 18l-5-5" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+
+      <h1 id="thanks-title">¡Gracias por contactarnos!</h1>
+
+      <p id="thanks-sub" class="lead">Hemos recibido tu mensaje. Te responderemos en menos de 24 horas a <span id="user-email">tu correo</span>.</p>
+
+      <div class="meta">
+        
+        <p class="muted">También puedes escribir por <a href="https://wa.me/56944839131">WhatsApp</a> o llamar al <a href="tel:+56944839131">+56 9 4483 9131</a>.</p>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-primary" href="/">Volver al inicio</a>
+        <a class="btn btn-soft" href="/productos">Mientras esperas, conoce nuestros cursos</a>
+      </div>
+    </article>
+  </main>
+
+  <script type="module">
+    // Read email from query param ?email=... and inject into page, with basic sanitization
+    (function () {
+      try {
+        const params = new URLSearchParams(location.search);
+        const e = params.get('email') || params.get('correo') || '';
+        const el = document.getElementById('user-email');
+        if (el) {
+          const email = e ? decodeURIComponent(e).trim() : '';
+          // Basic sanitize: allow only typical email characters
+          const safe = email && /^[\w.!#$%&'*+/=?^`{|}~-]+@[\w-]+(\.[\w-]+)+$/.test(email) ? email : 'tu correo';
+          el.textContent = safe;
+        }
+      } catch (err) {
+        // no-op
+      }
+    })();
+  </script>
+
+  <style>
+    /* Mobile-first centered thank you page */
+    .thank-you { display:flex; align-items:center; justify-content:center; min-height:100vh; padding:28px 18px; }
+    .panel { width:100%; max-width:780px; text-align:center; background:var(--surface, #fff); border-radius:18px; padding:28px; box-shadow:var(--shadow, 0 10px 30px rgba(43,29,95,0.06)); animation:fadeInUp .42s ease both; }
+    .icon { width:84px; height:84px; margin-inline:auto; margin-bottom:18px; border-radius:999px; display:grid; place-items:center; background:linear-gradient(180deg,var(--primary),var(--primary-2)); box-shadow:0 8px 24px rgba(111,76,228,0.14); }
+    h1 { margin:0 0 12px 0; font-size:clamp(1.4rem,5vw,2rem); color:var(--text); }
+    .lead { margin:0 0 18px 0; color:var(--muted); line-height:1.6; max-width:48ch; margin-inline:auto; }
+    .lead strong { color:var(--text); }
+    .meta { margin-top:6px; display:grid; gap:8px; }
+    .muted { color:var(--muted); font-size:0.95rem; margin:0; }
+    .muted a { color:var(--primary); text-decoration:none; font-weight:600; }
+    .actions { display:flex; gap:12px; justify-content:center; margin-top:20px; flex-wrap:wrap; }
+    .btn { min-width:180px; display:inline-flex; justify-content:center; align-items:center; padding:10px 18px; border-radius:12px; }
+    .btn-primary { background:var(--primary); color:#fff; border:0; box-shadow:0 8px 18px rgba(111,76,228,0.16); }
+    .btn-soft { background:#f6f6ff; color:var(--primary); border:0; }
+
+    @keyframes fadeInUp { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+
+    @media (max-width:640px) {
+      .panel { padding:20px; border-radius:14px; }
+      .icon { width:72px;height:72px; }
+      .actions { flex-direction:column; }
+      .btn { width:100%; min-width:0; }
+    }
+  </style>
+</MainLayout>

@@ -1,0 +1,72 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+export async function getStaticPaths() {
+  const ENDPOINT = 'https://cursosdeestetica.cl/graphql';
+  let slugs = [];
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: `query AllPosts { posts(first: 1000) { nodes { slug } } }` }),
+    });
+    const data = await res.json();
+    slugs = data?.data?.posts?.nodes?.map((p) => p.slug) ?? [];
+  } catch (err) {
+    console.error('Error fetching post slugs', err);
+    slugs = [];
+  }
+  // Prefetch each post and return props so pages are rendered with data at build time
+  const results = await Promise.all(
+    slugs.map(async (s) => {
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            query: `query PostBySlug($slug: ID!) { post(id: $slug, idType: SLUG) { id databaseId slug title date content excerpt featuredImage { node { sourceUrl altText } } status } }`,
+            variables: { slug: s },
+          }),
+        });
+        const data = await res.json();
+        const post = data?.data?.post ?? null;
+        return { params: { slug: s }, props: { post } };
+      } catch (err) {
+        console.error('Error prefetching post', s, err);
+        return { params: { slug: s }, props: { post: null } };
+      }
+    })
+  );
+  return results;
+}
+
+const { post } = Astro.props;
+---
+
+<MainLayout title={post?.title ?? 'Noticia'}>
+  {post ? (
+    <article class="post-page">
+      <header class="post-header">
+        <h1 innerHTML={post.title}></h1>
+        <time>{new Date(post.date).toLocaleDateString('es-CL', { year:'numeric', month:'long', day:'2-digit' })}</time>
+      </header>
+      {post.featuredImage?.node?.sourceUrl ? <img src={post.featuredImage.node.sourceUrl} alt={post.featuredImage.node.altText ?? post.title} style="width:100%;max-height:420px;object-fit:cover;border-radius:12px;margin:18px 0;" /> : null}
+      <div class="post-content" set:html={post.content || post.excerpt}></div>
+    </article>
+  ) : (
+    <div>
+      <div style="color:var(--muted);font-weight:700;margin-bottom:12px;">No se encontró la noticia.</div>
+      {error && <div style="color:#c00;margin-bottom:8px;">Error: {error}</div>}
+      <details style="background:#fff;border:1px solid var(--line);padding:12px;border-radius:8px;">
+        <summary style="font-weight:700">Datos raw de la consulta (debug)</summary>
+        <pre style="white-space:pre-wrap;max-height:320px;overflow:auto;margin-top:8px;">{JSON.stringify(rawData, null, 2)}</pre>
+      </details>
+    </div>
+  )}
+
+  <style>
+    .post-header h1 { margin:0 0 8px; font-size:clamp(1.6rem,3vw,2.6rem) }
+    .post-header time { color:var(--muted); display:block; margin-bottom:12px }
+    .post-content { line-height:1.75; color:var(--text) }
+  </style>
+</MainLayout>

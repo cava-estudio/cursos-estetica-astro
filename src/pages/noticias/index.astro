@@ -1,0 +1,79 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+export async function getStaticProps() {
+  const ENDPOINT = 'https://cursosdeestetica.cl/graphql';
+  let posts = [];
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        query: `query AllPosts { posts(first: 20, where: {status: "publish"}) { nodes { id databaseId slug title date excerpt featuredImage { node { sourceUrl altText } } } } }`,
+      }),
+    });
+    if (!res.ok) throw new Error('No se pudo consultar las noticias.');
+    const data = await res.json();
+    posts = data?.data?.posts?.nodes ?? [];
+  } catch (err) {
+    console.error('Error consultando noticias:', err);
+    posts = [];
+  }
+
+  return { props: { posts } };
+}
+
+const posts = (Astro.props && Astro.props.posts) ? Astro.props.posts : [];
+---
+
+<MainLayout title="Noticias | Cursos de Estética">
+  <section class="news-page pt-32">
+    <header class="news-header section">
+      <p class="news-kicker">Noticias</p>
+      <h1>Actualidad y Tendencias en Estética</h1>
+      <p>
+        Contenido editorial para profesionales que buscan actualizar criterios
+        técnicos, optimizar resultados y fortalecer su posicionamiento.
+      </p>
+    </header>
+
+    <section class="news-grid" aria-label="Grid de noticias">
+      {posts.map((item) => (
+        <article class="news-card section">
+          {item.featuredImage?.node?.sourceUrl ? (
+            <img src={item.featuredImage.node.sourceUrl} alt={item.featuredImage.node.altText ?? item.title} loading="lazy" />
+          ) : (
+            <img src="/noticias.jpg" alt={item.title} loading="lazy" />
+          )}
+          <div class="news-card-body">
+            <time>{new Date(item.date).toLocaleDateString('es-CL', { year:'numeric', month:'short', day:'2-digit' })}</time>
+            <h2 innerHTML={item.title}></h2>
+            <p innerHTML={item.excerpt}></p>
+            <a href={`/noticias/${item.slug}/`} class="news-btn">Leer más</a>
+          </div>
+        </article>
+      ))}
+    </section>
+  </section>
+</MainLayout>
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
+  .pt-32 { padding-top: 8rem; }
+  .news-page { display: grid; gap: 22px; }
+  .news-header { padding: 30px clamp(16px, 3vw, 34px); border: 1px solid #e7ddff; background: radial-gradient(circle at 90% 20%, rgba(112, 79, 230, 0.18), transparent 42%), #faf8ff; font-family: "Plus Jakarta Sans", "Quicksand", sans-serif; }
+  .news-kicker { margin:0;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem;color:#6f4ce4;font-weight:700 }
+  .news-header h1 { margin:10px 0 0; font-size:clamp(1.6rem,3.2vw,2.5rem); color:#2a2637 }
+  .news-header p { margin:12px 0 0; max-width:66ch; color:#58556d; line-height:1.65 }
+  .news-grid { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:18px; }
+  .news-card { overflow:hidden;border-radius:18px;border:1px solid #ece7f8;box-shadow:0 10px 22px rgba(34,22,74,0.08);background:#fff }
+  .news-card img { width:100%; height:210px; object-fit:cover; display:block }
+  .news-card-body { padding:16px; display:grid; gap:10px; font-family:"Plus Jakarta Sans","Quicksand",sans-serif }
+  .news-card time { color:#7a7594; font-size:.82rem; font-weight:600 }
+  .news-card h2 { margin:0; font-size:1.16rem; line-height:1.35; color:#27223a }
+  .news-card p { margin:0; color:#5d5975; line-height:1.52; min-height:70px }
+  .news-btn { margin-top:4px; width:fit-content; text-decoration:none; border-radius:999px; background:#704fe6; color:#fff; min-height:38px; padding:9px 14px; font-weight:700 }
+  @media (max-width:1200px){ .news-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+  @media (max-width:860px){ .pt-32{ padding-top:6rem } .news-grid{ grid-template-columns:1fr } }
+</style>

@@ -1,0 +1,237 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+export async function getStaticPaths() {
+  const ENDPOINT = 'https://cursosdeestetica.cl/graphql';
+  // 1) Traer todos los slugs
+  let slugs = [];
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        query: `query AllProductSlugs { products(first: 1000, where: {status: "publish"}) { nodes { slug } } }`,
+      }),
+    });
+    if (!res.ok) throw new Error('No se pudo consultar los slugs de productos.');
+    const data = await res.json();
+    if (data?.data?.products?.nodes) slugs = data.data.products.nodes.map((p) => p.slug);
+  } catch (err) {
+    console.error('Error consultando todos los slugs:', err);
+    slugs = [];
+  }
+
+  // 2) Para cada slug, solicitar los datos del producto y devolver como props
+  // Esto asegura que Astro reciba `Astro.props.product` en cada página estática.
+  const results = await Promise.all(
+    slugs.map(async (slug) => {
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            query: `query GetProductBySlug($slug: ID!) { product(id: $slug, idType: SLUG) { databaseId id slug name sku status description shortDescription image { sourceUrl altText } productCategories { nodes { name slug } } productTags { nodes { name slug } } ... on SimpleProduct { price regularPrice salePrice } ... on VariableProduct { price regularPrice salePrice } visibleProducts { nodes { databaseId slug name image { sourceUrl } } } } }`,
+            variables: { slug },
+          }),
+        });
+        if (!res.ok) throw new Error('No se pudo consultar el producto: ' + slug);
+        const data = await res.json();
+        const product = data?.data?.product ?? null;
+        const error = product ? null : 'Producto no encontrado o no publicado.';
+        return { params: { slug }, props: { product, error } };
+      } catch (err) {
+        console.error('Error consultando producto', slug, err);
+        return { params: { slug }, props: { product: null, error: 'Error trayendo datos del curso: ' + err.message } };
+      }
+    }),
+  );
+
+  // Si no hay slugs, devolvemos al menos uno para evitar fallos en build (opcional)
+  if (results.length === 0) return [];
+  return results;
+}
+
+const { product, error } = Astro.props;
+---
+
+<MainLayout title={product?.name ?? 'Curso no encontrado'}>
+  {error && (
+    <div style="color: red; margin: 2em 0; font-weight: bold;">{error}</div>
+  )}
+  {product ? (
+    <section class="detalle-producto">
+      <h1 class="titulo-producto">{product.name}</h1>
+      {product.image?.sourceUrl ? (
+        <div class="img-wrap">
+          <img class="img-curso" src={product.image.sourceUrl} alt={product.image.altText ?? product.name} />
+        </div>
+      ) : (
+        <div class="img-placeholder">Sin imagen</div>
+      )}
+      <div class="info-precios">
+        {product.salePrice && product.salePrice !== product.regularPrice ? (
+          <>
+            <span class="precio-regular tachado">{product.regularPrice}</span>
+            <span class="precio-oferta">{product.salePrice}</span>
+          </>
+        ) : (
+          <span class="precio-normal">{product.price}</span>
+        )}
+      </div>
+      <!-- Cantidad y Añadir al carrito -->
+      <form class="add-to-cart-form" action="https://cursosdeestetica.cl/carrito/" method="get" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:1.2em;">
+        <label style="font-size:0.95rem;color:var(--muted);">Cantidad
+          <input type="number" name="quantity" min="1" value="1" style="width:74px;margin-left:8px;padding:6px;border-radius:8px;border:1px solid var(--line);" />
+        </label>
+        <input type="hidden" name="add-to-cart" value={product.databaseId} />
+        <button type="submit" class="btn btn-primary" style="padding:10px 18px;border-radius:12px;">Añadir al carrito</button>
+        <a class="btn btn-white" href="https://cursosdeestetica.cl/carrito/" style="padding:10px 14px;border-radius:12px;text-decoration:none;">Ir al carrito</a>
+      </form>
+      {product.shortDescription ? (
+        <div class="descripcion" set:html={product.shortDescription}></div>
+      ) : null}
+      {product.description ? (
+        <div class="descripcion" set:html={product.description}></div>
+      ) : null}
+      {!product.description && !product.shortDescription && (
+        <div>No hay descripción disponible.</div>
+      )}
+      {product.sku && <div class="sku">SKU: {product.sku}</div>}
+      {product.productCategories?.nodes?.length > 0 && (
+        <div class="categorias">Categorías: {product.productCategories.nodes.map((cat) => (
+          <a href={`/categoria-producto/${cat.slug}/`} style="color:var(--primary);text-decoration:none;margin-right:6px;">{cat.name}</a>
+        ))}</div>
+      )}
+      {product.productTags?.nodes?.length > 0 && (
+        <div class="tags" style="margin-top:.6em;color:var(--muted);">Tags: {product.productTags.nodes.map((t) => {
+          const catSlug = product.productCategories?.nodes?.[0]?.slug ?? null;
+          const href = catSlug ? `/categoria-producto/${catSlug}/` : `/tag/${t.slug}/`;
+          return (<a href={href} style="color:var(--primary);text-decoration:none;margin-right:6px;">{t.name}</a>);
+        })}</div>
+      )}
+    </section>
+  ) : !error && (
+    <div style="margin: 2em 0;">No se encontró información para este curso.</div>
+  )}
+
+  {/* Productos relacionados */}
+  {product && (
+    <section style="max-width:960px;margin:2em auto;padding:1em;">
+      <h3 style="margin:0 0 .6em 0;">Productos relacionados</h3>
+      {product.visibleProducts?.nodes?.length > 0 ? (
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
+          {product.visibleProducts.nodes.map((rel) => (
+            <a class="related-card" href={`/producto/${rel.slug}`} style="display:block;padding:8px;border-radius:12px;border:1px solid var(--line);text-decoration:none;color:inherit;">
+              {rel.image?.sourceUrl ? <img src={rel.image.sourceUrl} alt={rel.name} style="width:100%;height:120px;object-fit:cover;border-radius:8px;margin-bottom:8px;" /> : <div style="width:100%;height:120px;border-radius:8px;margin-bottom:8px;display:grid;place-items:center;color:#999;">Sin imagen</div>}
+              <div style="font-weight:600;">{rel.name}</div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div style="color:var(--muted);">No hay productos relacionados configurados. Puedes mostrar productos de la misma categoría como alternativa.</div>
+      )}
+    </section>
+  )}
+
+  <style>
+    .detalle-producto {
+      border-radius: var(--radius-lg);
+      padding: 2em;
+      /* Aumentamos el ancho del contenedor para que la imagen destaque más */
+      max-width: 760px;
+      margin: 2em auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .titulo-producto {
+      font-size: 2.4rem;
+      margin-bottom: 1em;
+      text-align: center;
+      letter-spacing: -1px;
+      font-weight: 700;
+    }
+    .img-curso {
+      border-radius: var(--radius-md);
+      object-fit: cover;
+      /* Imagen un 25-30% más grande para destacar */
+      width: 420px;
+      max-width: 92vw;
+      margin-bottom: 1.6em;
+      box-shadow: 0 4px 16px rgba(112,79,230,.13);
+      transition: transform 360ms cubic-bezier(.2,.9,.2,1), box-shadow 360ms;
+      transform-origin: center center;
+    }
+    .img-wrap {
+      overflow: hidden;
+      border-radius: var(--radius-md);
+      display: inline-block;
+      will-change: transform;
+    }
+    /* Apply zoom to any image inside an .img-wrap (works for galleries) */
+    .img-wrap .img-curso {
+      transition: transform 300ms cubic-bezier(.22,.9,.32,1), box-shadow 300ms;
+      transform-origin: center center;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      will-change: transform;
+    }
+    .img-wrap:hover .img-curso {
+      transform: scale(1.04);
+      box-shadow: 0 10px 30px rgba(112,79,230,0.18);
+    }
+    @media (max-width: 520px) {
+      .img-wrap:hover .img-curso { transform: scale(1.02); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .img-wrap .img-curso { transition: none; }
+    }
+    .img-placeholder {
+      width: 320px;
+      height: 210px;
+      background: #eee;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      font-style: italic;
+      margin-bottom: 1.6em;
+    }
+    .info-precios {
+      font-size: 1.9rem;
+      margin-bottom: 1em;
+      font-weight: 600;
+      text-align: center;
+    }
+    .precio-regular.tachado {
+      text-decoration: line-through;
+      color: #aaa;
+      margin-right: 1em;
+    }
+    .precio-oferta {
+      color: var(--primary);
+      font-weight: 700;
+    }
+    .precio-normal {
+      color: var(--primary-2);
+    }
+    .descripcion {
+      font-size: 1.1rem;
+      margin-bottom: 1em;
+      color: var(--text);
+      text-align: left;
+      width: 100%;
+    }
+    .estado, .sku {
+      color: var(--muted);
+      font-size: 1rem;
+      margin: 0.7em 0 .5em 0;
+    }
+    .categorias {
+      color: var(--muted);
+      font-size: 1rem;
+      margin: 0.7em 0 0 0;
+    }
+  </style>
+</MainLayout>

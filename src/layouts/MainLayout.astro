@@ -2,7 +2,7 @@
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 
-const { title = "Cursos de Estetica | Antigravity" } = Astro.props;
+const { title = "Cursos de Estetica" } = Astro.props;
 ---
 
 <!doctype html>
@@ -41,6 +41,7 @@ const { title = "Cursos de Estetica | Antigravity" } = Astro.props;
     --bg: #f4f3f2;
     --primary: #704fe6;
     --primary-2: #896af2;
+    --danger: #c0392b;
     --text: #221b38;
     --muted: #665f81;
     --surface: #ffffff;
@@ -74,6 +75,29 @@ const { title = "Cursos de Estetica | Antigravity" } = Astro.props;
     max-width: 100%;
     height: auto;
     display: block;
+  }
+
+  /* Focus styles: replace default blue focus ring with brand primary color */
+  input:focus, textarea:focus, select:focus, button:focus {
+    outline: none;
+  }
+
+  input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible {
+    outline: none;
+    border-color: var(--primary);
+    /* subtle glow using primary color */
+    box-shadow: 0 8px 20px rgba(112,79,230,0.08), 0 0 0 4px rgba(112,79,230,0.06);
+    transition: box-shadow 0.18s ease, border-color 0.12s ease;
+  }
+
+  /* Invalid / validation state styling */
+  input:invalid, textarea:invalid, select:invalid {
+    border-color: var(--danger);
+  }
+
+  input:invalid:focus-visible, textarea:invalid:focus-visible, select:invalid:focus-visible {
+    box-shadow: 0 8px 20px rgba(192,57,43,0.10), 0 0 0 4px rgba(192,57,43,0.06);
+    border-color: var(--danger);
   }
 
   .page {
