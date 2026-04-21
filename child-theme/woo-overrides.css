@@ -1,4 +1,0 @@
-/* Additional Woo overrides */
-.woocommerce ul.products li.product { border-radius:12px; overflow:hidden; }
-.woocommerce .onsale { background:var(--primary); color:#fff; padding:6px 10px; border-radius:8px; }
-.woocommerce .woocommerce-breadcrumb a { color:var(--muted); }
