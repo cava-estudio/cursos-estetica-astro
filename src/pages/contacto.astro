@@ -29,23 +29,19 @@ const CONTACT_ENDPOINT = import.meta.env.PUBLIC_WP_CONTACT_ENDPOINT ?? '';
 
 <MainLayout title={page?.title ?? 'Contacto'}>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-  <section style="max-width:1100px;margin:2.6rem auto;padding:18px;display:grid;gap:18px;">
+  <section class="contact-section" style="max-width:1100px;margin:2.6rem auto;padding:18px;display:grid;gap:18px;">
     <header style="display:flex;flex-direction:column;gap:8px;">
       <p class="eyebrow" style="margin:0;color:var(--primary);text-transform:uppercase;font-weight:700;letter-spacing:.12em;">Contacto</p>
-      <h1 style="margin:0;font-size:clamp(1.6rem,3.4vw,2.6rem);">{page?.title ?? 'Contáctanos'}</h1>
+      <h1 style="margin:0;color: var(--title);font-size:clamp(1.6rem,3.4vw,2.6rem);">{page?.title ?? 'Contáctanos'}</h1>
       <p style="color:var(--muted);max-width:70ch;">Si tienes dudas sobre cursos, formaciones o quieres solicitar información personalizada, escríbenos usando el formulario o contacta directamente por teléfono o e‑mail.</p>
     </header>
 
-    {page?.content ? (
-      <div class="page-copy" set:html={page.content}></div>
-    ) : (
-      <p>No hay contenido de contacto en el CMS. Puedes añadir dirección, teléfono y map en WordPress.</p>
-    )}
+
 
     <!-- Two-column area: form (left) + contact aside (right) -->
-    <div class="contact-grid" style="display:grid;grid-template-columns:1fr 420px;gap:26px;align-items:start;margin-top:18px;">
+    <div class="contact-grid" style="display:grid;grid-template-columns:1fr 420px;gap:26px;align-items:start;margin-top:18px;max-width:1100px;">
       <div>
-        <form id="contact-form" style="display:grid;gap:12px;max-width:760px;" data-endpoint={CONTACT_ENDPOINT}>
+        <form id="contact-form" style="display:grid;gap:12px;max-width:860px;" data-endpoint={CONTACT_ENDPOINT}>
           <input type="text" name="hp" id="hp" class="hp" aria-hidden="true" tabindex="-1" />
           <!-- Turnstile widget invisible -->
           <div class="cf-turnstile" 
@@ -54,7 +50,7 @@ const CONTACT_ENDPOINT = import.meta.env.PUBLIC_WP_CONTACT_ENDPOINT ?? '';
                data-size="invisible">
           </div>
 
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="two-cols" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
             <label for="name" style="display:block"><span class="sr-only">Nombre completo</span>
               <input id="name" name="name" type="text" placeholder="Nombre completo" required style="padding:10px;border-radius:10px;border:1px solid var(--line);width:100%;" />
             </label>
@@ -78,8 +74,8 @@ const CONTACT_ENDPOINT = import.meta.env.PUBLIC_WP_CONTACT_ENDPOINT ?? '';
 
           <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
             <button id="submit-btn" type="submit" class="btn btn-primary" style="padding:10px 18px;border-radius:12px;">Enviar mensaje</button>
-            <div id="form-status" role="status" aria-live="polite" style="color:var(--muted);"></div>
-            <small style="color:var(--muted);">{CONTACT_ENDPOINT ? 'El formulario se enviará al endpoint configurado.' : 'Actualmente el envío es simulado. Configura PUBLIC_WP_CONTACT_ENDPOINT para activar envío real.'}</small>
+            <div id="form-status" class="sr-only" role="status" aria-live="polite"></div>
+            <!-- Endpoint notice removed from UI -->
           </div>
         </form>
       </div>
@@ -92,17 +88,20 @@ const CONTACT_ENDPOINT = import.meta.env.PUBLIC_WP_CONTACT_ENDPOINT ?? '';
     
           </div>
 
-          <div class="footer-contact-list contact-hero" style="display:grid;gap:10px;margin-top:-25px;">
-            <a href="tel:+56944839131" class="footer-contact-item" style="align-items:center;gap:12px;padding:8px 10px;">
+          <div class="footer-contact-list contact-hero" style="display:flex;flex-direction:column;gap:12px;margin-top:0;padding:0;">
+            <a href="tel:+56944839131" class="footer-contact-item" style="align-items:center;gap:12px;padding:12px 14px;width:100%;box-sizing:border-box;">
               <span class="footer-contact-icon" aria-hidden="true">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.09 4.18 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.72c.12.97.36 1.91.72 2.79a2 2 0 0 1-.45 2.11L9.91 9.91a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.11-.45c.88.36 1.82.6 2.79.72A2 2 0 0 1 22 16.92z" fill="white"></path>
                 </svg>
               </span>
-              <span style="font-weight:700;font-size:1rem;">+56 9 4483 9131</span>
+              <div class="contact-content">
+                <span class="contact-main">+56 9 4483 9131</span>
+                <span class="contact-sub">Llámanos</span>
+              </div>
             </a>
 
-            <a href="mailto:hola@cursosdeestetica.cl" class="footer-contact-item" style="align-items:center;gap:12px;padding:8px 10px;">
+            <a href="mailto:hola@cursosdeestetica.cl" class="footer-contact-item" style="align-items:center;gap:12px;padding:12px 14px;width:100%;box-sizing:border-box;">
               <span class="footer-contact-icon" aria-hidden="true">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <path d="M4 4h16v16H4z" fill="none"></path>
@@ -110,17 +109,23 @@ const CONTACT_ENDPOINT = import.meta.env.PUBLIC_WP_CONTACT_ENDPOINT ?? '';
                   <path d="M22 6.5l-10 7L2 6.5" fill="white"></path>
                 </svg>
               </span>
-              <span style="font-weight:700;font-size:1rem;">hola@cursosdeestetica.cl</span>
+              <div class="contact-content">
+                <span class="contact-main">hola@cursosdeestetica.cl</span>
+                <span class="contact-sub">Escríbenos</span>
+              </div>
             </a>
 
-            <a href="https://wa.me/56944839131" class="footer-contact-item" style="align-items:center;gap:12px;padding:8px 10px;">
+            <a href="https://wa.me/56944839131" class="footer-contact-item" style="align-items:center;gap:12px;padding:12px 14px;width:100%;box-sizing:border-box;" target="_blank" rel="noopener noreferrer">
               <span class="footer-contact-icon" aria-hidden="true">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <path d="M20.52 3.48A11.92 11.92 0 0 0 12 1C6.48 1 2 5.48 2 11c0 1.89.5 3.66 1.38 5.2L2 23l6.02-1.36A11.92 11.92 0 0 0 12 23c5.52 0 10-4.48 10-10 0-1.92-.52-3.7-1.48-5.12zM12 20a8.94 8.94 0 0 1-4.54-1.2l-.32-.18-3.58.8.8-3.5-.2-.34A8.94 8.94 0 0 1 4 11c0-4.97 4.03-9 9-9 2.4 0 4.63.93 6.32 2.6A8.94 8.94 0 0 1 21 11c0 4.97-4.03 9-9 9z" fill="white"></path>
                   <path d="M17.6 14.2c-.3-.15-1.78-.88-2.06-.98-.28-.1-.48-.15-.68.15-.2.3-.78.98-.96 1.18-.18.2-.36.22-.66.07-.3-.15-1.26-.46-2.4-1.48-.89-.78-1.48-1.74-1.65-2.04-.17-.3-.02-.46.12-.6.12-.12.28-.3.42-.45.14-.15.18-.26.3-.43.12-.18.06-.33-.03-.48-.09-.15-.68-1.64-.93-2.25-.24-.6-.49-.52-.66-.53-.17-.01-.36-.01-.55-.01-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.3 0 1.36.98 2.68 1.12 2.87.14.18 1.94 3.04 4.7 4.26 3.26 1.48 3.26 1.01 3.84.95.58-.06 1.78-.72 2.03-1.42.25-.7.25-1.3.18-1.42-.07-.12-.28-.18-.58-.33z" fill="white"></path>
                 </svg>
               </span>
-              <span style="font-weight:700;font-size:1rem;">Escríbenos por WhatsApp</span>
+              <div class="contact-content">
+                <span class="contact-main">+56 9 4483 9131</span>
+                <span class="contact-sub">WhatsApp</span>
+              </div>
             </a>
       </aside>
     </div>
@@ -214,18 +219,82 @@ const CONTACT_ENDPOINT = import.meta.env.PUBLIC_WP_CONTACT_ENDPOINT ?? '';
     .sr-only { position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden; }
     .hp { position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden; }
     /* replicate footer contact visual style */
-    .footer-contact-item { display:inline-flex; align-items:center; gap:12px; text-decoration:none; color:var(--text); }
-    .footer-contact-icon { width:64px; height:64px; border-radius:14px; display:inline-grid; place-items:center; background:linear-gradient(180deg,var(--primary),var(--primary-2)); color:#fff; font-weight:800; font-size:1.5rem; }
-    .contact-hero .footer-contact-item { padding:24px 14px; border-radius:12px; }
-    .contact-grid { align-items:start; }
-    /* Move the aside higher and tighten internal spacing so its contact items align
-       visually with the first row of form inputs (Nombre / Teléfono). */
+    /* Layout each contact item as two columns: fixed icon (left) + flexible content (right)
+       this forces the icon to stay flush left and content to align consistently. */
+    /* Make icon column fixed and align icon to the left edge of the card */
+    .footer-contact-list { display:flex; flex-direction:column; gap:12px; align-items:stretch; padding:0; margin:0; }
+    .footer-contact-item { display:grid; grid-template-columns: 56px 1fr; gap:12px; align-items:center; justify-items:start; text-decoration:none; color:var(--text); background: #fff; border-radius:12px; box-shadow: 0 6px 18px rgba(15,11,32,0.06); padding: 12px 14px; width:100%; box-sizing:border-box; }
+    .footer-contact-icon { width:56px; height:56px; border-radius:12px; display:inline-flex; align-items:center; justify-content:center; background:linear-gradient(180deg,var(--primary),var(--primary-2)); color:#fff; font-weight:800; font-size:1.25rem; flex-shrink:0; justify-self:start; }
+    .contact-hero .footer-contact-item { padding:12px 14px; border-radius:12px; }
+    .contact-content { display:flex; flex-direction:column; align-items:flex-start; padding-right:8px; text-align:left; }
+    /* Primary text size adjusted and line-height improved for readability */
+    .contact-main { display:block; font-weight:700; font-size:0.95rem; line-height:1.22; text-align:left; overflow-wrap:break-word; word-break:break-word; max-width:100%; }
+    .contact-sub { display:block; font-size:0.82rem; color:var(--muted); margin-top:6px; }
+    .contact-grid { align-items:start; grid-template-columns: 1fr 420px; gap: 26px; }
+    /* Move the aside higher and tighten internal spacing on desktop */
     .contact-aside { position:sticky; top:24px; padding-top:6px; }
     .contact-aside .footer-mini-logo { margin-bottom:6px; }
     .contact-aside h3 { margin:0 0 6px 0; text-align:left; }
     .contact-aside .contact-hero { margin-top:2px; }
     .contact-aside .footer-contact-list { gap:10px; }
-    @media (max-width:900px) { .footer-contact-icon { width:44px;height:44px;font-size:1.05rem; } }
-    @media (max-width:900px) { .page-copy { max-width:100%; } div[style*="grid-template-columns"] { grid-template-columns:1fr !important; } }
+
+    /* Responsive: collapse to single column on smaller screens and remove sticky aside */
+    @media (max-width: 900px) {
+      .contact-grid { grid-template-columns: 1fr !important; gap: 16px; }
+      .contact-aside { position: static; top: auto; padding: 12px; }
+      .contact-aside .footer-contact-item { padding: 12px 10px; }
+      .footer-contact-icon { width:44px;height:44px;font-size:1.05rem; }
+      form#contact-form { max-width: 100%; }
+      /* Stack the two-column row on small screens */
+      .two-cols { grid-template-columns: 1fr !important; }
+      /* ensure inputs scale properly on narrow screens */
+      form#contact-form input, form#contact-form textarea { width: 100% !important; box-sizing: border-box; }
+      .contact-aside { margin-top: 0; }
+    }
+
+    /* Additional fine-tuning for very small screens */
+    @media (max-width: 480px) {
+      .contact-grid { gap: 12px !important; padding: 0 8px; }
+      .eyebrow { font-size: 0.68rem; }
+      h1 { font-size: 1.25rem; }
+      .contact-aside .footer-contact-item { padding: 10px 8px; }
+      .footer-contact-icon { width:36px; height:36px; font-size:0.9rem; justify-self:start; }
+      .footer-contact-list { gap:12px; }
+      .footer-contact-item { padding-left: 10px; padding-right: 10px; }
+      .contact-main { font-size:0.92rem; }
+      .footer-contact-item { padding-right: 12px; }
+      .contact-main { font-size:0.85rem !important; }
+      .menu-pill { font-size: 0.88rem; }
+      .nav-cta { min-height: 40px; }
+      .menu { gap: 8px; }
+    }
+
+    /* Fix para emails largos en pantallas muy estrechas (p.ej. 320px) */
+    @media (max-width: 340px) {
+      .footer-contact-item { grid-template-columns: 44px 1fr; padding: 8px 10px; gap:10px; }
+      .footer-contact-icon { width:32px; height:32px; }
+      .contact-main { font-size: 0.85rem; line-height:1.18; white-space:normal; overflow-wrap:anywhere; word-break:break-word; }
+      .contact-sub { font-size:0.78rem; }
+      .contact-content { padding-right:6px; }
+      .contact-aside { padding-right: 8px; }
+    }
+
+    /* Prevent accidental horizontal overflow and ensure proper centering on mobile */
+    .contact-section { box-sizing: border-box; padding-left: 12px; padding-right: 12px; 
+      margin-left: auto; margin-right: auto; width: 100%; }
+    .contact-grid { margin-inline: auto; width: 100%; box-sizing: border-box; }
+    .contact-section * { max-width: 100%; box-sizing: border-box; }
+    .contact-aside { max-width: 420px; width: 100%; box-sizing: border-box; padding-right: 12px; }
+    .footer-contact-list { padding-right: 12px; }
+    .contact-aside .footer-contact-list { gap:10px; }
+
+    /* Ensure nav toggle stays above potential content shifts */
+    .nav-toggle { z-index: 90; }
+    /* Force contact section to be fully centered and prevent unintended left offset */
+    .contact-section { margin-left: auto !important; margin-right: auto !important; left: 0 !important; right: 0 !important; transform: none !important; }
+    /* Remove any accidental extra padding on inner grids */
+    .contact-section .contact-grid { padding-left: 0 !important; padding-right: 0 !important; }
+    /* Ensure the main content doesn't get pushed by wide background elements */
+    .contact-section, .contact-section > * { max-width: 100%; overflow-x: hidden; }
   </style>
 </MainLayout>

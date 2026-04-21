@@ -2,16 +2,16 @@
 import MainLayout from "../layouts/MainLayout.astro";
 
 const masVendidos = [
-  {
+    {
     titulo: "CrioLipo",
-    href: "https://cursosdeestetica.cl/producto/criolipo-2/",
+    href: "/producto/curso-criolipo-2",
     image: "/criolipo.webp",
     imagePosition: "center",
     wide: true,
   },
   {
     titulo: "Criolipólisis de placa",
-    href: "https://cursosdeestetica.cl/producto/criolipolisis-de-placa/",
+    href: "/producto/curso-criolipolisis-de-placa",
     image: "/criolipolisis-de-placa.webp",
     imagePosition: "center",
     wide: false,
@@ -19,7 +19,7 @@ const masVendidos = [
 ];
 
 const cursos = [
-  {
+    {
     titulo: "CrioLipo",
     tituloMedia: "CrioLipo",
     image: "/1-curso.webp",
@@ -27,18 +27,18 @@ const cursos = [
     precioAnterior: "$600.000",
     precioActual: "$450.000",
     tieneOferta: true,
-    href: "https://cursosdeestetica.cl/producto/criolipo-2/",
+    href: "/producto/curso-criolipo-2",
   },
-  {
+    {
     titulo: "Criolipólisis de placas",
     tituloMedia: "Criolipólisis de placa",
     image: "/2-curso.webp",
     descripcion: "Técnicas estáticas y dinámicas para lograr reducción y reafirmación corporal.",
     precioActual: "$140.000",
     tieneOferta: false,
-    href: "https://cursosdeestetica.cl/producto/criolipolisis-de-placa/",
+    href: "/producto/curso-criolipolisis-de-placa",
   },
-  {
+    {
     titulo: "Criolipólisis Expert",
     tituloMedia: "Criolipólisis Expert",
     image: "/3-curso.webp",
@@ -46,9 +46,9 @@ const cursos = [
     precioAnterior: "$1.200.000",
     precioActual: "$850.000",
     tieneOferta: true,
-    href: "https://cursosdeestetica.cl/producto/criolipolisis-expert/",
+    href: "/producto/curso-criolipolisis-expert",
   },
-  {
+    {
     titulo: "Secretos de Criolipólisis",
     tituloMedia: "Secretos de Criolipólisis",
     image: "/4-curso.webp",
@@ -57,9 +57,9 @@ const cursos = [
     tieneOferta: false,
     colorFondoTitulo: "#CE63CE",
     colorElipse: "#CB62CE",
-    href: "https://cursosdeestetica.cl/producto/curso-secretos-de-criolipolisis/",
+    href: "/producto/curso-secretos-de-criolipolisis",
   },
-  {
+    {
     titulo: "Curso Tratamiento Criofacial Fusión Multicapa",
     tituloMedia: "Tratamiento Criofacial Fusión Multicapa",
     image: "/5-curso.webp",
@@ -70,9 +70,9 @@ const cursos = [
     tieneOferta: true,
     colorFondoTitulo: "#CE63CE",
     colorElipse: "#CB62CE",
-    href: "https://cursosdeestetica.cl/producto/curso-tratamiento-criofacial-fusion-multicapa/",
+    href: "/producto/curso-tratamiento-criofacial-fusion-multicapa",
   },
-  {
+    {
     titulo: "Tecnologías para Grasa Localizada",
     tituloMedia: "Tecnologías para Grasa Localizada",
     image: "/6-curso.webp",
@@ -81,9 +81,9 @@ const cursos = [
     tieneOferta: false,
     colorFondoTitulo: "#CE63CE",
     colorElipse: "#CB62CE",
-    href: "https://cursosdeestetica.cl/producto/tecnologias-para-grasa-localizada/",
+    href: "/producto/curso-tecnologias-para-grasa-localizada",
   },
-  {
+    {
     titulo: "Ultrasonido Micro Focalizados Mfus y Hifu",
     tituloMedia: "Ultrasonido Micro Focalizados Mfus y Hifu",
     image: "/7-curso.webp",
@@ -94,9 +94,9 @@ const cursos = [
     colorElipse: "#C4CFDA",
     colorTextoTitulo: "#FFFFFF",
     colorIcono: "#FFFFFF",
-    href: "https://cursosdeestetica.cl/producto/ultrasonidos-micro-focalizados-mfus-y-hifu/",
+    href: "/producto/curso-ultrasonidos-micro-focalizados-mfus-y-hifu",
   },
-  {
+    {
     titulo: "Prevención y Manejo de Complicaciones en Criolipólisis",
     tituloMedia: "Prevención y Manejo de Complicaciones en Criolipólisis",
     image: "/8-curso.webp",
@@ -107,9 +107,9 @@ const cursos = [
     colorElipse: "#C4CFDA",
     colorTextoTitulo: "#FFFFFF",
     colorIcono: "#FFFFFF",
-    href: "https://cursosdeestetica.cl/producto/curso-prevencion-y-manejo-de-complicaciones-con-criolipolisis/",
+    href: "/producto/curso-prevencion-y-manejo-de-complicaciones-con-criolipolisis",
   },
-  {
+    {
     titulo: "Depilación Laser Teórico y Practico demostrativo",
     tituloMedia: "Depilación Laser Teórico y Practico demostrativo",
     image: "/9-curso-1.webp",
@@ -120,7 +120,7 @@ const cursos = [
     colorElipse: "#C4CFDA",
     colorTextoTitulo: "#FFFFFF",
     colorIcono: "#FFFFFF",
-    href: "https://cursosdeestetica.cl/producto/depilacion-laser-teorico-y-practico-demostrativo/",
+    href: "/producto/curso-depilacion-laser-teorico-y-practico-demostrativo",
   },
 ];
 
@@ -133,7 +133,7 @@ const heroTags = [
 ---
 
 <MainLayout title="Cursos de Estetica | Antigravity">
-<section class="section hero" aria-label="2 - hero">
+<section class="hero full-bleed" aria-label="2 - hero">
           <img class="hero-bg" src="/hero-pablo-ortiz.webp" alt="Tratamiento estetico facial" />
           <div class="hero-overlay" aria-hidden="true"></div>
 
@@ -164,7 +164,7 @@ const heroTags = [
           </div>
         </section>
 
-        <section class="section banner banner-one" aria-label="3 - banner-uno">
+        <section class="banner banner-one full-bleed" aria-label="3 - banner-uno">
           <div class="banner-track" aria-label="Texto continuo cursos de estetica">
             <span>CURSOS DE ESTÉTICA</span>
             <span>CURSOS DE ESTÉTICA</span>
@@ -177,7 +177,7 @@ const heroTags = [
         <section class="section vendidos" id="mas-vendidos" aria-label="4 - seccion-mas-vendidos">
           <div class="vendidos-heading">
             <span class="vendidos-mark" aria-hidden="true"></span>
-            <h2>Más vendidos</h2>
+            <h2 style="color: var(--title);">Más vendidos</h2>
           </div>
 
           <div class="cards cards-featured">
@@ -205,7 +205,7 @@ const heroTags = [
           </div>
         </section>
 
-        <section class="section banner banner-two" aria-label="5 - banner-dos">
+        <section class="banner banner-two full-bleed" aria-label="5 - banner-dos">
           <div class="banner-two-content">
             <p class="eyebrow">Aprendizaje con impacto</p>
             <h3>
@@ -221,7 +221,7 @@ const heroTags = [
 
         <section class="section cursos" id="cursos" aria-label="6 - cursos">
           <div class="cursos-header">
-            <h2>Cursos</h2>
+            <h2 style="color: var(--title);">Cursos</h2>
             <p>Explora nuestro catálogo de cursos y encuentra la formación ideal para ti.</p>
             <svg class="cursos-line" viewBox="0 0 258 46" aria-hidden="true" focusable="false">
               <path d="M7 36 C 27 28, 42 16, 61 11 C 71 8, 84 12, 90 22 C 96 33, 96 39, 106 40 C 133 42, 158 28, 185 24 C 207 20, 229 23, 251 31" />

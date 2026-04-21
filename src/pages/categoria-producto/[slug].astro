@@ -1,0 +1,72 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+// Pre-render a set of important category pages for SEO. We'll generate pages
+// for the most used slugs in WP. If you want more categories prerendered,
+// add them to the `prerenderSlugs` array below.
+export async function getStaticPaths() {
+  const prerenderSlugs = [
+    'cursos-online-grabados',
+    'cursos-online-presenciales',
+    'cursos-online',
+    'cursos-presencial-online',
+  ];
+
+  const ENDPOINT = 'https://cursosdeestetica.cl/graphql';
+  const results = await Promise.all(prerenderSlugs.map(async (slug) => {
+    try {
+      const query = `query ProductsByCategory($slug: ID!) { products(first: 200, where: {status: \"publish\"}) { nodes { name slug shortDescription image { sourceUrl altText } productCategories { nodes { slug } } } } }`;
+      const res = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query }),
+      });
+      const json = await res.json();
+      let products = json?.data?.products?.nodes ?? [];
+      products = products.filter(p => (p.productCategories?.nodes || []).some(c => c.slug === slug));
+      return { params: { slug }, props: { products } };
+    } catch (err) {
+      return { params: { slug }, props: { products: [] } };
+    }
+  }));
+
+  return results;
+}
+
+const { products = [], error = null } = Astro.props;
+const categoria = Astro.params.slug;
+---
+
+<MainLayout title={`Cursos — ${categoria}`}>
+  <section style="max-width:1200px;margin:2.6rem auto;padding:18px;">
+    <header style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px;">
+      <div>
+        <p class="eyebrow">Cursos</p>
+        <h1 style="margin:6px 0 0 0;color: var(--title);">{categoria.replace(/-/g,' ')}</h1>
+        <p style="color:var(--muted);max-width:60ch;margin-top:8px;">Listado de cursos en la categoría <strong>{categoria}</strong>. Haz click en cualquier tarjeta para ver detalles.</p>
+      </div>
+    </header>
+
+    {products && products.length ? (
+      <div class="grid">
+        {products.map((p) => (
+          <a class="card" href={`/producto/${p.slug}`}>
+            <div class="media">{p.image?.sourceUrl ? <img src={p.image.sourceUrl} alt={p.image.altText ?? p.name} /> : <div style="height:140px;background:#f2f2f6;border-radius:8px;"></div>}</div>
+            <h3>{p.name}</h3>
+            <p class="muted">{p.shortDescription ? p.shortDescription.replace(/(<([^>]+)>)/gi, '').slice(0, 140) : ''}</p>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p>No hay productos disponibles para mostrar en esta categoría.</p>
+    )}
+  </section>
+
+  <style>
+    .grid { display:grid; gap:18px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+    .card { text-decoration:none; color:var(--text); background:var(--surface); padding:12px; border-radius:12px; box-shadow:var(--shadow); display:block; }
+    .card h3 { margin:12px 0 6px 0; font-size:1.05rem; }
+    .card .muted { color:var(--muted); font-size:.95rem; margin:0; }
+    .media img { width:100%; height:140px; object-fit:cover; border-radius:8px; }
+  </style>
+</MainLayout>

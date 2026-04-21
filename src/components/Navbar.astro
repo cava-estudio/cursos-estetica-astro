@@ -8,29 +8,29 @@ const navItems = [
     href: "/sobre-nosotros",
     active: pathname === "/sobre-nosotros",
   },
-  {
-    label: "Cursos",
-    active: false,
-    children: [
       {
-        label: "Cursos Online Grabados",
-        href: "https://cursosdeestetica.cl/categoria-producto/cursos-online-grabados/",
-        tone: "recorded",
+        label: "Cursos",
+        active: false,
+        children: [
+          {
+            label: "Cursos Online Grabados",
+            href: "/cursos/cursos-online-grabados",
+            tone: "recorded",
+          },
+          {
+            label: "Cursos Online Presenciales",
+            href: "/cursos/cursos-online-presenciales",
+            tone: "live",
+          },
+        ],
       },
-      {
-        label: "Cursos Online Presenciales",
-        href: "https://cursosdeestetica.cl/categoria-producto/cursos-online-presenciales/",
-        tone: "live",
-      },
-    ],
-  },
   { label: "Noticias", href: "/noticias", active: pathname === "/noticias" },
   { label: "Contacto", href: "/contacto", active: pathname === "/contacto" },
 ];
 ---
 
 <header class="section nav" aria-label="1 - nav-bar" data-nav-root>
-  <a href="https://cursosdeestetica.cl/" class="logo">
+  <a href="/" class="logo">
     <img src="/logo-pablo-ortiz.webp" alt="Pablo Ortiz Cursos de Estetica" />
   </a>
 
@@ -76,9 +76,14 @@ const navItems = [
         </a>
       )
     ))}
+    <!-- Mobile-only CTA: keeps the Aula Virtual link inside the toggled menu for small screens -->
+    <a class="nav-cta menu-cta-mobile" href="https://aula.cursosdeestetica.cl/" data-nav-cta-mobile target="_blank" rel="noopener noreferrer">
+      <span>Aula Virtual</span>
+      <span class="nav-cta-icon" aria-hidden="true">↗</span>
+    </a>
   </nav>
 
-  <a class="nav-cta" href="https://aula.cursosdeestetica.cl/" data-nav-cta>
+  <a class="nav-cta" href="https://aula.cursosdeestetica.cl/" data-nav-cta target="_blank" rel="noopener noreferrer">
     <span>Aula Virtual</span>
     <span class="nav-cta-icon" aria-hidden="true">↗</span>
   </a>
@@ -90,9 +95,9 @@ const navItems = [
   navRoots.forEach((root) => {
     const toggle = root.querySelector("[data-nav-toggle]");
     const menu = root.querySelector("[data-nav-menu]");
-    const cta = root.querySelector("[data-nav-cta]");
 
-    if (!toggle || !menu || !cta) return;
+    // Make the navbar logic resilient if the desktop CTA is not present
+    if (!toggle || !menu) return;
 
     const closeMenu = () => {
       root.classList.remove("is-open");
@@ -157,3 +162,40 @@ const navItems = [
     });
   });
 </script>
+
+<style is:inline>
+  /* Make the mobile copy of the CTA visually similar to desktop but proportionate to other menu items */
+  .menu-cta-mobile { display: none; }
+  @media (max-width: 768px) {
+    .menu-cta-mobile {
+      display: inline-flex !important;
+      min-width: 0 !important;
+      width: auto; /* let content size it */
+      max-width: 220px; /* restrict max width so it doesn't dominate */
+      align-self: center;
+      justify-content: center;
+      padding: 8px 14px; /* balanced padding */
+      box-sizing: border-box;
+      order: 4;
+      background: #f6f6f6;
+      border: 2px solid #6f4ce4; /* slightly thicker border for presence */
+      color: #6f4ce4;
+      border-radius: 999px;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      min-height: 36px; /* compact */
+    }
+    .menu-cta-mobile .nav-cta-icon {
+      width: 18px;
+      height: 18px;
+      font-size: 0.85rem;
+      background: #e3964e;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+  }
+</style>

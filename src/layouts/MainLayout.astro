@@ -39,6 +39,7 @@ const { title = "Cursos de Estetica" } = Astro.props;
 
   :root {
     --bg: #f4f3f2;
+    --title: #36198a;
     --primary: #704fe6;
     --primary-2: #896af2;
     --danger: #c0392b;
@@ -56,6 +57,8 @@ const { title = "Cursos de Estetica" } = Astro.props;
     box-sizing: border-box;
   }
 
+
+
   html,
   body {
     margin: 0;
@@ -71,16 +74,9 @@ const { title = "Cursos de Estetica" } = Astro.props;
       var(--bg);
   }
 
-  img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-  }
-
-  /* Focus styles: replace default blue focus ring with brand primary color */
+  img {    max-width: 100%;    height: auto;    display: block;  }
   input:focus, textarea:focus, select:focus, button:focus {
-    outline: none;
-  }
+    outline: none;}
 
   input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible {
     outline: none;
@@ -101,7 +97,7 @@ const { title = "Cursos de Estetica" } = Astro.props;
   }
 
   .page {
-    padding: 24px 16px 42px;
+   x
     display: flex;
     justify-content: center;
     width: 100%;
@@ -115,6 +111,7 @@ const { title = "Cursos de Estetica" } = Astro.props;
     display: grid;
     gap: 14px;
   }
+  
 
   .section {
     background: var(--surface);
@@ -345,7 +342,7 @@ const { title = "Cursos de Estetica" } = Astro.props;
     color: var(--primary);
   }
 
-  .hero {
+   .hero {
     min-height: clamp(430px, 45vw, 640px);
     position: relative;
     overflow: hidden;
@@ -356,6 +353,7 @@ const { title = "Cursos de Estetica" } = Astro.props;
     border-radius: 0 !important;
     box-shadow: none !important;
   }
+
 
   .hero-bg {
     position: absolute;
@@ -411,13 +409,13 @@ const { title = "Cursos de Estetica" } = Astro.props;
     margin-top: 10px;
   }
 
-  .hero-line {
-    width: min(258px, 45vw);
-    height: 46px;
-    display: block;
-    margin: 14px 0 12px clamp(24px, 20vw, 383px);
-    overflow: visible;
-  }
+    .hero-line {
+      width: min(258px, 45vw);
+      height: 46px;
+      display: block;
+      margin: 14px 0 12px clamp(24px, 20vw, 383px);
+      overflow: visible;
+    }
 
   .hero-line path {
     fill: none;
@@ -520,7 +518,7 @@ const { title = "Cursos de Estetica" } = Astro.props;
     font-size: clamp(1.05rem, 1.95vw, 1.65rem);
   }
 
-  .banner-one {
+   .banner-one {
     min-height: 55px;
     height: 55px;
     padding: 0 24px;
@@ -743,11 +741,12 @@ const { title = "Cursos de Estetica" } = Astro.props;
     border: 1px solid #cec4ee;
     border-radius: 0;
     box-shadow: none;
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
     background: linear-gradient(110deg, #6a48dc 0%, #7f61ea 56%, #9a84f6 100%);
     color: #fff;
+    box-sizing: border-box;
   }
 
   .banner-two::before {
@@ -795,9 +794,10 @@ const { title = "Cursos de Estetica" } = Astro.props;
     overflow: hidden;
     background: transparent;
     box-shadow: none;
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
   }
 
   .cursos-header {
@@ -1075,6 +1075,8 @@ const { title = "Cursos de Estetica" } = Astro.props;
   .curso-buy:hover {
     transform: translateY(-1px);
   }
+
+  .cta-wrap-buy { display:flex; justify-content:center; align-items:center; }
 
   .footer {
     min-height: 300px;
@@ -1692,7 +1694,7 @@ const { title = "Cursos de Estetica" } = Astro.props;
     }
 
     .hero-bg {
-      object-position: 65% 32%;
+      object-position: 65% 32% !important;
     }
 
     .hero-content {
@@ -1912,6 +1914,58 @@ const { title = "Cursos de Estetica" } = Astro.props;
       visibility: visible;
     }
 
+    /* Additional mobile refinements to improve card layout and spacing */
+    .grid, .cards, .grid-cursos { grid-template-columns: 1fr !important; gap: 12px !important; }
+    .container { padding-left: 8px; padding-right: 8px; }
+    .page { padding: 10px 8px 18px; }
+    .card h3, .course-card h3 { font-size: 1rem; }
+    .card .muted, .course-card .desc { font-size: 0.92rem; }
+    .course-card .card-body { gap: 6px; padding-top: 8px; }
+    .course-card .media img, .course-card .img-placeholder, .curso-media { height: 120px; }
+    .course-card .title-wrap { min-height: 2.8em; }
+    .course-card .desc-wrap { min-height: 1.6em; }
+    .course-card .meta-actions { flex-direction: column; gap: 8px; align-items: stretch; }
+    .course-card .price-wrap, .course-card .cta-wrap { width: 100%; }
+    .course-card .price { text-align: left; }
+    .course-card .cta-wrap { justify-content: center; }
+    .nav-cta { display: none !important; }
+    .logo img { width: clamp(120px, 40vw, 180px); }
+    .menu { gap: 6px; }
+
+    /* Reduce large paddings across sections for compact mobile layout */
+    .cursos { padding: 28px 12px 18px; }
+    .vendidos { padding: 20px 12px; }
+    .hero { min-height: 420px; }
+    .hero-content { padding: 20px 12px; }
+
+    /* Tighter spacing for course cards on small screens: remove excess space after CTA */
+    .curso-item {
+      padding: 10px !important;
+      gap: 10px !important;
+      min-height: auto !important;
+    }
+
+    .curso-body {
+      gap: 8px !important;
+      padding-bottom: 6px !important;
+    }
+
+    .curso-meta {
+      margin-top: 6px !important;
+      gap: 8px !important;
+      align-items: center !important;
+    }
+
+    .curso-buy {
+      width: 42px !important;
+      height: 42px !important;
+    }
+
+    .grid-cursos { gap: 12px !important; }
+
+    /* Make buttons full width on very small screens inside cards */
+    .course-card .cta-wrap .btn { width: 100%; justify-content: center; }
+
     .dropdown-item {
       font-size: 0.82rem;
       padding: 8px 10px;
@@ -2018,20 +2072,20 @@ const { title = "Cursos de Estetica" } = Astro.props;
     .banner-one {
       padding: 9px 16px;
       border-radius: 0;
-      width: 100vw;
-      min-width: 100vw;
-      margin-left: calc(50% - 50vw);
-      margin-right: calc(50% - 50vw);
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
     }
 
     .banner-track {
       gap: 14px;
       justify-content: center;
       width: 100%;
+    
     }
 
     .banner-track span {
-      font-size: 11px;
+      font-size: 10px;
       line-height: 18px;
     }
 
@@ -2431,18 +2485,37 @@ const { title = "Cursos de Estetica" } = Astro.props;
       gap: 10px;
     }
 
-    .btn {
-      min-height: 40px;
-      font-size: 0.84rem;
-      padding: 9px 12px;
-    }
+    .btn { min-height: 40px; font-size: 0.84rem; padding: 9px 12px; }
+    .footer-links { gap: 10px; }
+    .footer-links a { font-size: 0.86rem; }
+  }
+  /* Extra mobile fixes: reduce excessive vertical spacing after course CTA */
+  @media (max-width: 480px) {
+    .card, .curso-item, .course-card { min-height: auto !important; padding: 8px !important; }
+    .course-card { display: flex; flex-direction: column; }
+    .course-card .card-body { flex: 1 1 auto !important; display: flex !important; flex-direction: column !important; gap: 6px !important; padding-top: 8px !important; }
+    .course-card .title-wrap { min-height: 2.2em !important; }
+    .course-card .desc-wrap { min-height: 1.4em !important; }
+    .course-card .meta-actions { margin-top: auto !important; gap: 8px !important; align-items: center !important; justify-content: space-between !important; flex-direction: row !important; }
+    /* prefer compact CTA sizing on small screens */
+    .course-card .cta-wrap .btn { width: auto !important; padding: 8px 12px !important; }
+  }
+  
+  @media (max-width: 900px) {
+    .page { padding-left: 0 !important; padding-right: 0 !important; }
+  }
 
-    .footer-links {
-      gap: 10px;
-    }
-
-    .footer-links a {
-      font-size: 0.86rem;
+  @media (max-width: 900px) {
+    .hero, .banner, .banner-one, .banner-two, .featured-card, .cards, .cards-featured {
+      width: 100% !important;
+      min-width: 0 !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      left: auto !important;
+      right: auto !important;
+      transform: none !important;
     }
   }
+
+
 </style>

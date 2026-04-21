@@ -1,0 +1,138 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import CourseCard from '../components/CourseCard.astro';
+import { courses as serverCourses } from '../data/cursos';
+
+// Keep local dataset as source-of-truth and pre-render the first page (SSG)
+const perPage = 12;
+const initialPage = 1;
+const initialChunk = serverCourses.slice(0, perPage);
+
+---
+
+<MainLayout title="Cursos">
+    <script id="__COURSES_META" type="application/json">{JSON.stringify({ total: serverCourses.length, totalPages: Math.max(1, Math.ceil(serverCourses.length / perPage)), perPage })}</script>
+
+    <!-- Phase B: lazy-fetch subsequent pages and category-filtered results from /api/cursos.json -->
+    <!-- Script moved below the section to ensure DOM elements exist before running -->
+
+    <section style="max-width:1200px;margin:2.6rem auto;padding:18px;">
+    <header style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px;">
+      <div>
+        <p class="eyebrow">Cursos</p>
+        <h1 id="cursos-title" style="margin:6px 0 0 0;color: var(--title)">Nuestros cursos</h1>
+        <p style="color:var(--muted);max-width:60ch;margin-top:8px;">Haz click para ver detalles.</p>
+      </div>
+    </header>
+    
+    <div id="cursos-grid" class="grid">
+      {initialChunk.map((c) => (
+        <CourseCard curso={{ ...c, href: c.href || `/producto/${c.slug}` }} />
+      ))}
+    </div>
+  </section>
+
+  <script type="module">
+    // Client behaviour: handle category filter and pagination by calling /api/cursos.json
+    (function () {
+      const container = document.getElementById('cursos-grid');
+      const titleEl = document.getElementById('cursos-title');
+      const metaEl = document.getElementById('__COURSES_META');
+      const meta = metaEl ? JSON.parse(metaEl.textContent || '{}') : { total: 0, totalPages: 1, perPage: 12 };
+      const params = new URLSearchParams(location.search);
+      const categoria = params.get('categoria');
+
+      // If a query-based category is used, redirect to server-rendered route for reliable filtering
+      if (categoria) {
+        const normalized = String(categoria).trim();
+        const target = `/cursos/${encodeURIComponent(normalized)}`;
+        if (location.pathname !== target) {
+          // Use replace to avoid polluting history
+          location.replace(target);
+          return;
+        }
+      }
+      let page = parseInt(params.get('page') || '1', 10) || 1;
+      const perPageLocal = meta.perPage || 12;
+
+      function setTitle() {
+        if (categoria) titleEl.textContent = 'Cursos - ' + categoria.replace(/-/g, ' ');
+        else titleEl.textContent = 'Nuestros cursos';
+      }
+
+      function setLoading() { container.innerHTML = '<div class="loading">Cargando cursos…</div>'; }
+      function setEmpty() { container.innerHTML = '<p>No hay productos disponibles para mostrar.</p>'; }
+
+      function renderProducts(products) {
+        container.innerHTML = '';
+        products.forEach(p => {
+          const a = document.createElement('a');
+          a.className = 'card course-card';
+          a.href = p.href || '/producto/' + p.slug;
+          const img = p.image ? `<img src="${p.image}" alt="${p.title || p.titulo || p.slug}" />` : '<div class="img-placeholder"></div>';
+          const desc = (p.description || p.descripcion || '').replace(/(<([^>]+)>)/gi, '').slice(0,120);
+          const title = p.title || p.titulo || p.slug;
+          a.innerHTML = `<div class="media">${img}</div><h3>${title}</h3><p class="muted">${desc}</p>`;
+          container.appendChild(a);
+        });
+      }
+
+      function renderPagination(page, totalPages) {
+        const existing = document.getElementById('cursos-pagination'); if (existing) existing.remove(); if (totalPages <= 1) return;
+        const nav = document.createElement('nav'); nav.id = 'cursos-pagination'; nav.setAttribute('aria-label', 'Navegación de páginas'); nav.style = 'display:flex;gap:8px;align-items:center;justify-content:center;margin-top:18px;flex-wrap:wrap;';
+        const makeBtn = (label, p, disabled=false, aria='') => { const b = document.createElement('button'); b.type = 'button'; b.textContent = label; b.disabled = disabled; b.setAttribute('aria-label', aria || `Ir a la página ${p}`); b.style = 'padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);cursor:pointer;'; b.addEventListener('click', () => goToPage(p)); return b; };
+        nav.appendChild(makeBtn('← Anterior', Math.max(1, page-1), page<=1, 'Página anterior'));
+        const windowSize = 5; let start = Math.max(1, page - Math.floor(windowSize/2)); let end = Math.min(totalPages, start + windowSize - 1); if (end - start < windowSize - 1) start = Math.max(1, end - windowSize + 1);
+        if (start > 1) { nav.appendChild(makeBtn('1', 1)); if (start > 2) { const dots = document.createElement('span'); dots.textContent = '…'; dots.style.padding='0 6px'; nav.appendChild(dots); } }
+        for (let i = start; i <= end; i++) { const btn = document.createElement('button'); btn.type = 'button'; btn.textContent = String(i); btn.disabled = i === page; btn.setAttribute('aria-label', `Página ${i}`); btn.style = i === page ? 'padding:8px 12px;border-radius:8px;border:2px solid var(--primary);background:var(--primary);color:#fff;cursor:default;' : 'padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);cursor:pointer;'; btn.addEventListener('click', () => goToPage(i)); nav.appendChild(btn); }
+        if (end < totalPages) { if (end < totalPages - 1) { const dots = document.createElement('span'); dots.textContent = '…'; dots.style.padding='0 6px'; nav.appendChild(dots); } nav.appendChild(makeBtn(String(totalPages), totalPages)); }
+        nav.appendChild(makeBtn('Siguiente →', Math.min(totalPages, page+1), page>=totalPages, 'Página siguiente'));
+        const section = container.closest('section'); section.appendChild(nav);
+      }
+
+      async function fetchAndRender(p) {
+        try {
+          setLoading();
+          const q = new URLSearchParams(); q.set('page', String(p)); q.set('perPage', String(perPageLocal)); if (categoria) q.set('categoria', categoria);
+          const url = '/api/cursos.json?' + q.toString();
+          // Debugging logs were here during development; removed for production readiness
+          const res = await fetch(url, { cache: 'no-store' });
+          const json = await res.json();
+          // api response received
+          const products = json.products || [];
+          const totalPages = json.totalPages || Math.max(1, Math.ceil((json.total || meta.total) / perPageLocal));
+          if (!products.length) { setEmpty(); } else { renderProducts(products); }
+          renderPagination(p, totalPages);
+        } catch (err) {
+          console.error('Error fetching cursos', err); container.innerHTML = '<p>Error cargando cursos. Intenta de nuevo.</p>';
+        }
+      }
+
+      function goToPage(p) { page = Math.max(1, Math.min(p, 9999)); const params = new URLSearchParams(location.search); params.set('page', String(page)); history.pushState({}, '', location.pathname + '?' + params.toString()); fetchAndRender(page); }
+      window.addEventListener('popstate', () => { const params = new URLSearchParams(location.search); page = parseInt(params.get('page') || '1', 10) || 1; fetchAndRender(page); });
+
+      // Ensure title is set
+      setTitle();
+
+      // debug panel removed
+
+      // If category present, always fetch filtered results (even page 1). This avoids showing the SSG chunk when a filter is requested.
+      if (categoria) {
+        fetchAndRender(page);
+      } else if (page === 1) {
+        // Keep server-rendered chunk and just render pagination
+        renderPagination(1, meta.totalPages || 1);
+      } else {
+        fetchAndRender(page);
+      }
+    })();
+  </script>
+
+  <style>
+    .grid { display:grid; gap:18px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+    .card { text-decoration:none; color:var(--text); background:var(--surface); padding:12px; border-radius:12px; box-shadow:var(--shadow); display:block; }
+    .card h3 { margin:12px 0 6px 0; font-size:1.05rem; }
+    .card .muted { color:var(--muted); font-size:.95rem; margin:0; }
+    .media img { width:100%; height:140px; object-fit:cover; border-radius:8px; }
+  </style>
+</MainLayout>

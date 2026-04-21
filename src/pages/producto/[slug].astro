@@ -1,5 +1,7 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import CourseCard from '../../components/CourseCard.astro';
+import QtyControl from '../../components/QtyControl.astro';
 
 export async function getStaticPaths() {
   const ENDPOINT = 'https://cursosdeestetica.cl/graphql';
@@ -30,7 +32,7 @@ export async function getStaticPaths() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            query: `query GetProductBySlug($slug: ID!) { product(id: $slug, idType: SLUG) { databaseId id slug name sku status description shortDescription image { sourceUrl altText } productCategories { nodes { name slug } } productTags { nodes { name slug } } ... on SimpleProduct { price regularPrice salePrice } ... on VariableProduct { price regularPrice salePrice } visibleProducts { nodes { databaseId slug name image { sourceUrl } } } } }`,
+            query: `query GetProductBySlug($slug: ID!) { product(id: $slug, idType: SLUG) { databaseId id slug name sku status description shortDescription image { sourceUrl altText } productCategories { nodes { name slug } } productTags { nodes { name slug } } ... on SimpleProduct { price regularPrice salePrice } ... on VariableProduct { price regularPrice salePrice } visibleProducts { nodes { databaseId slug name } } } }`,
             variables: { slug },
           }),
         });
@@ -60,7 +62,7 @@ const { product, error } = Astro.props;
   )}
   {product ? (
     <section class="detalle-producto">
-      <h1 class="titulo-producto">{product.name}</h1>
+      <h1 class="titulo-producto" style="color: var(--title);">{product.name}</h1>
       {product.image?.sourceUrl ? (
         <div class="img-wrap">
           <img class="img-curso" src={product.image.sourceUrl} alt={product.image.altText ?? product.name} />
@@ -79,14 +81,28 @@ const { product, error } = Astro.props;
         )}
       </div>
       <!-- Cantidad y Añadir al carrito -->
-      <form class="add-to-cart-form" action="https://cursosdeestetica.cl/carrito/" method="get" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:1.2em;">
-        <label style="font-size:0.95rem;color:var(--muted);">Cantidad
-          <input type="number" name="quantity" min="1" value="1" style="width:74px;margin-left:8px;padding:6px;border-radius:8px;border:1px solid var(--line);" />
-        </label>
-        <input type="hidden" name="add-to-cart" value={product.databaseId} />
-        <button type="submit" class="btn btn-primary" style="padding:10px 18px;border-radius:12px;">Añadir al carrito</button>
-        <a class="btn btn-white" href="https://cursosdeestetica.cl/carrito/" style="padding:10px 14px;border-radius:12px;text-decoration:none;">Ir al carrito</a>
+      <form class="add-to-cart-form" action="https://cursosdeestetica.cl/carrito/" method="get">
+     
+      
+        <div class="form-row">
+          <div class="qty-control">
+             <input type="hidden" name="add-to-cart" value={product.databaseId} />
+            <QtyControl name="quantity" value="1" min="1" id="product-qty" />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Añadir al carrito</button>
+          <a class="btn btn-white" href="https://cursosdeestetica.cl/carrito/">Ir al carrito</a>
+        </div>
       </form>
+      <!-- Modal / toast shown when adding to cart -->
+      <div id="cart-modal" role="status" aria-live="polite" aria-hidden="true" class="cart-modal" hidden>
+        <div class="cart-modal-inner">
+          <div class="cart-spinner" aria-hidden="true"></div>
+          <div class="cart-modal-text">Procesando tu solicitud… Redirigiendo al carrito</div>
+        </div>
+      </div>
       {product.shortDescription ? (
         <div class="descripcion" set:html={product.shortDescription}></div>
       ) : null}
@@ -97,43 +113,269 @@ const { product, error } = Astro.props;
         <div>No hay descripción disponible.</div>
       )}
       {product.sku && <div class="sku">SKU: {product.sku}</div>}
-      {product.productCategories?.nodes?.length > 0 && (
+        {product.productCategories?.nodes?.length > 0 && (
         <div class="categorias">Categorías: {product.productCategories.nodes.map((cat) => (
-          <a href={`/categoria-producto/${cat.slug}/`} style="color:var(--primary);text-decoration:none;margin-right:6px;">{cat.name}</a>
+          <a href={`/cursos?categoria=${cat.slug}`} style="color:var(--primary);text-decoration:none;margin-right:6px;">{cat.name}</a>
         ))}</div>
       )}
-      {product.productTags?.nodes?.length > 0 && (
-        <div class="tags" style="margin-top:.6em;color:var(--muted);">Tags: {product.productTags.nodes.map((t) => {
-          const catSlug = product.productCategories?.nodes?.[0]?.slug ?? null;
-          const href = catSlug ? `/categoria-producto/${catSlug}/` : `/tag/${t.slug}/`;
-          return (<a href={href} style="color:var(--primary);text-decoration:none;margin-right:6px;">{t.name}</a>);
-        })}</div>
-      )}
+    
     </section>
   ) : !error && (
     <div style="margin: 2em 0;">No se encontró información para este curso.</div>
   )}
 
-  {/* Productos relacionados */}
-  {product && (
-    <section style="max-width:960px;margin:2em auto;padding:1em;">
-      <h3 style="margin:0 0 .6em 0;">Productos relacionados</h3>
-      {product.visibleProducts?.nodes?.length > 0 ? (
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
-          {product.visibleProducts.nodes.map((rel) => (
-            <a class="related-card" href={`/producto/${rel.slug}`} style="display:block;padding:8px;border-radius:12px;border:1px solid var(--line);text-decoration:none;color:inherit;">
-              {rel.image?.sourceUrl ? <img src={rel.image.sourceUrl} alt={rel.name} style="width:100%;height:120px;object-fit:cover;border-radius:8px;margin-bottom:8px;" /> : <div style="width:100%;height:120px;border-radius:8px;margin-bottom:8px;display:grid;place-items:center;color:#999;">Sin imagen</div>}
-              <div style="font-weight:600;">{rel.name}</div>
-            </a>
-          ))}
-        </div>
-      ) : (
-        <div style="color:var(--muted);">No hay productos relacionados configurados. Puedes mostrar productos de la misma categoría como alternativa.</div>
-      )}
+  
+      </div>
     </section>
-  )}
+  
+
+  <script type="module">
+    (async function() {
+      try {
+        const container = document.getElementById('related-container');
+        if (!container) return;
+        // If server already rendered related items (visibleProducts provided), do nothing
+        if (container.querySelectorAll('.course-card').length > 0) return;
+
+        const productCat = "" + (Astro.props.product?.productCategories?.nodes?.[0]?.slug ?? '');
+        const currentSlug = "" + (Astro.props.product?.slug ?? '');
+        if (!productCat) {
+          container.innerHTML = '<div style="color:var(--muted);grid-column:1/-1;">No hay productos relacionados configurados.</div>';
+          return;
+        }
+
+        // First, try the local HTML endpoint which returns ready-to-insert markup
+        try {
+          const q = new URLSearchParams(); q.set('categoria', productCat); q.set('exclude', currentSlug); q.set('perPage', '6');
+          const htmlRes = await fetch('/api/cursos/related.html?' + q.toString());
+          if (htmlRes.ok) {
+            const html = await htmlRes.text();
+            if (html && html.trim().length > 20) {
+              container.innerHTML = html;
+              return;
+            }
+          }
+        } catch (e) {
+          // ignore and fallback to WPGraphQL below
+        }
+
+        // Fallback: query WPGraphQL for products in the same category
+        try {
+          const ENDPOINT = 'https://cursosdeestetica.cl/graphql';
+          const q = `query AllProductsForRelated { products(first: 200, where: {status: \"publish\"}) { nodes { slug name image { sourceUrl } productCategories { nodes { slug } } } } }`;
+          const res = await fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ query: q }) });
+          const json = await res.json();
+          const nodes = json?.data?.products?.nodes || [];
+          const related = nodes.filter(n => {
+            if (!n.productCategories) return false;
+            const slugs = (n.productCategories.nodes || []).map(c => c.slug);
+            return slugs.includes(productCat) && n.slug !== currentSlug;
+          }).slice(0,6);
+
+          if (!related.length) {
+            container.innerHTML = '<div style="color:var(--muted);grid-column:1/-1;">No hay productos relacionados configurados. Puedes mostrar productos de la misma categoría como alternativa.</div>';
+            return;
+          }
+
+          container.innerHTML = '';
+          related.forEach(rel => {
+            const a = document.createElement('a');
+            a.className = 'card course-card compact';
+            a.href = '/producto/' + rel.slug;
+            const imgSrc = (rel.image && (rel.image.sourceUrl || rel.image)) || '';
+            const mediaHtml = imgSrc
+              ? `<div class="media"><img src="${imgSrc}" alt="${(rel.name||'')}"></div>`
+              : `<div class="media"><div class="img-placeholder"></div></div>`;
+            const titleHtml = `<h3>${rel.name || ''}</h3>`;
+            const desc = '';
+            a.innerHTML = mediaHtml + titleHtml + `<p class="muted">${desc}</p>`;
+            container.appendChild(a);
+          });
+        } catch (err) {
+          console.error('Error cargando productos relacionados', err);
+        }
+      } catch (err) {
+        console.error('Error cargando productos relacionados', err);
+      }
+    })();
+  </script>
+
+      <script type="module">
+        // Attach behavior to QtyControl component (delegated)
+        (function () {
+          function clamp(n, min) { return Math.max(min, n); }
+          document.addEventListener('click', function (e) {
+            const dec = e.target.closest('.qty-decrease');
+            const inc = e.target.closest('.qty-increase');
+            if (!dec && !inc) return;
+            const root = e.target.closest('.detalle-producto') || document;
+            const input = root.querySelector('.qty-input');
+            if (!input) return;
+            const step = Number(input.step || 1) || 1;
+            const min = Number(input.min || 1) || 1;
+            let val = Number(input.value) || 0;
+            if (dec) val = clamp(val - step, min);
+            if (inc) val = clamp(val + step, min);
+            input.value = val;
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+          }, { passive: true });
+
+          document.addEventListener('input', function (e) {
+            if (!e.target.classList || !e.target.classList.contains('qty-input')) return;
+            const min = Number(e.target.min || 1) || 1;
+            let v = Number(e.target.value) || 0;
+            if (v < min) e.target.value = min;
+          });
+        })();
+  </script>
+
+  <script type="module">
+    // Intercept submit on the add-to-cart form to show an accessible modal/toast
+    (function () {
+      const DELAY_MS = 2000; // Visible duration before continuing to submit
+      const MAX_WAIT_MS = 8000; // Fallback if redirect doesn't happen
+      const form = document.querySelector('.add-to-cart-form');
+      const modal = document.getElementById('cart-modal');
+      if (!form || !modal) return;
+
+      const inner = modal.querySelector('.cart-modal-inner');
+      const textNode = modal.querySelector('.cart-modal-text');
+      if (inner) inner.setAttribute('tabindex', '-1'); // make focusable
+
+      let submitting = false;
+      let fallbackTimer = null;
+
+      function disableControls() {
+        const controls = Array.from(form.querySelectorAll('input,button,select,textarea'));
+        controls.forEach((c) => { try { c.disabled = true; c.setAttribute('aria-disabled', 'true'); } catch (err) {} });
+        const anchors = Array.from(form.querySelectorAll('a'));
+        anchors.forEach((a) => { a.dataset._prevPointer = a.style.pointerEvents || ''; a.style.pointerEvents = 'none'; a.setAttribute('aria-disabled', 'true'); });
+      }
+
+      function enableControls() {
+        const controls = Array.from(form.querySelectorAll('input,button,select,textarea'));
+        controls.forEach((c) => { try { c.disabled = false; c.removeAttribute('aria-disabled'); } catch (err) {} });
+        const anchors = Array.from(form.querySelectorAll('a'));
+        anchors.forEach((a) => { a.style.pointerEvents = a.dataset._prevPointer || ''; a.removeAttribute('aria-disabled'); delete a.dataset._prevPointer; });
+      }
+
+      function restoreUI(message) {
+        // Clear fallback timer if any
+        if (fallbackTimer) { clearTimeout(fallbackTimer); fallbackTimer = null; }
+        submitting = false;
+        // If a message is provided, announce it briefly then hide
+        if (message && textNode) {
+          textNode.textContent = message;
+          // keep visible so screen readers can read the error, then hide
+          setTimeout(() => {
+            if (modal) {
+              modal.hidden = true;
+              modal.setAttribute('aria-hidden', 'true');
+            }
+          }, 3500);
+        } else {
+          if (modal) {
+            modal.hidden = true;
+            modal.setAttribute('aria-hidden', 'true');
+          }
+        }
+        enableControls();
+        // focus the first submit button so user can try again
+        const primary = form.querySelector('button[type="submit"]');
+        if (primary && typeof primary.focus === 'function') primary.focus();
+      }
+
+      form.addEventListener('submit', function (e) {
+        // Always intercept the submit to show feedback; final submission uses form.submit()
+        if (submitting) {
+          e.preventDefault();
+          return;
+        }
+        e.preventDefault();
+        submitting = true;
+
+        // Reset modal text to default
+        if (textNode) textNode.textContent = 'Procesando tu solicitud… Redirigiendo al carrito';
+
+        // Show modal / toast
+        modal.hidden = false;
+        modal.setAttribute('aria-hidden', 'false');
+
+        // Move focus to the modal inner so assistive tech announces the status
+        if (inner && typeof inner.focus === 'function') inner.focus();
+
+        // Disable interactive controls inside the form to avoid double actions
+        disableControls();
+
+        // After the delay, proceed with the real submission to keep backend behavior
+        setTimeout(() => {
+          try {
+            // Use the native submit to avoid re-triggering JS handlers
+            form.submit();
+
+            // If navigation doesn't happen (some handler prevented it), restore after MAX_WAIT_MS
+            fallbackTimer = setTimeout(() => {
+              if (submitting) {
+                console.warn('Fallback: form submission did not navigate within expected time. Restoring UI.');
+                restoreUI('No se pudo completar la redirección. Por favor intenta de nuevo.');
+              }
+            }, MAX_WAIT_MS);
+          } catch (err) {
+            // If submit throws (rare), restore UI and log
+            console.error('Error submitting add-to-cart form', err);
+            restoreUI('No se pudo enviar el formulario. Por favor intenta de nuevo.');
+          }
+        }, DELAY_MS);
+      }, { passive: false });
+    })();
+  </script>
 
   <style>
+    /* Cart modal / toast styles */
+    .cart-modal {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.36);
+      z-index: 10000;
+      -webkit-backdrop-filter: blur(2px);
+      backdrop-filter: blur(2px);
+      padding: 1rem;
+    }
+    .cart-modal[hidden] { display: none; }
+    .cart-modal-inner {
+      background: #fff;
+      color: var(--text, #111);
+      padding: 14px 16px;
+      border-radius: 10px;
+      display: inline-flex;
+      gap: 12px;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+      max-width: 520px;
+      width: 100%;
+      justify-content: center;
+    }
+    .cart-modal-inner:focus {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(34, 111, 255, 0.12);
+    }
+    .cart-spinner {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 3px solid rgba(0,0,0,0.12);
+      border-top-color: var(--primary, #2b7cff);
+      box-sizing: border-box;
+      animation: tt-spin 900ms linear infinite;
+      flex: 0 0 auto;
+    }
+    @keyframes tt-spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .cart-spinner { animation: none; } }
+    .cart-modal-text { font-weight: 600; font-size: 1rem; color: var(--text, #111); }
+
     .detalle-producto {
       border-radius: var(--radius-lg);
       padding: 2em;
@@ -180,6 +422,8 @@ const { product, error } = Astro.props;
       transform: scale(1.04);
       box-shadow: 0 10px 30px rgba(112,79,230,0.18);
     }
+
+
     @media (max-width: 520px) {
       .img-wrap:hover .img-curso { transform: scale(1.02); }
     }
@@ -199,26 +443,33 @@ const { product, error } = Astro.props;
       margin-bottom: 1.6em;
     }
     .info-precios {
+      display: flex;
+      align-items: center;
       font-size: 1.9rem;
       margin-bottom: 1em;
       font-weight: 600;
       text-align: center;
+      gap: 4px !important;
     }
+    
     .precio-regular.tachado {
       text-decoration: line-through;
       color: #aaa;
-      margin-right: 1em;
+      margin-right: 12px !important;
+      
     }
     .precio-oferta {
       color: var(--primary);
       font-weight: 700;
+      gap: 4px !important;
     }
     .precio-normal {
       color: var(--primary-2);
+      gap: 4px !important;
     }
     .descripcion {
       font-size: 1.1rem;
-      margin-bottom: 1em;
+      margin-bottom: 1.5em;
       color: var(--text);
       text-align: left;
       width: 100%;
@@ -233,5 +484,131 @@ const { product, error } = Astro.props;
       font-size: 1rem;
       margin: 0.7em 0 0 0;
     }
-  </style>
+     .add-to-cart-form {
+       display: flex;
+       flex-wrap: wrap;
+       gap: 10px; 
+       align-items: center;
+       margin-bottom: 1.5em;
+    }
+    .form-row { flex: 0 1 auto;}
+
+    .form-actions {
+      display: flex;
+      flex-wrap: wrap;
+      flex: 1;      
+      gap: 10px;
+    }
+
+    .btn-primary {
+      flex: 1;         
+      white-space: nowrap;
+    }
+
+    .btn-white {
+      flex: 0 0 100%;  
+      text-align: center;
+    }
+
+
+
+    /* Responsive: mobile adjustments for product detail */
+    @media (max-width: 900px) {
+      .detalle-producto {
+        padding: 1.25rem;
+        max-width: min(720px, 96%);
+        margin: 1.25rem auto;
+      }
+      .titulo-producto { font-size: 1.9rem; margin-bottom: 0.8rem; }
+      .img-curso { width: 100%; max-width: 100%; height: auto; margin-bottom: 1rem; object-position: 50% 30%; }
+      .img-placeholder { width: 100%; max-width: 100%; height: 220px; margin-bottom: 1rem; }
+      .info-precios { font-size: 1.5rem; margin-bottom: 0.8rem; gap: 4px !important;}
+      .descripcion { font-size: 1rem; margin-bottom: 1.5rem; }
+      .estado, .sku, .categorias { font-size: 0.95rem; }
+    
+
+    @media (max-width: 768px) {
+      .titulo-producto { font-size: 1.7rem; }
+      .img-curso { object-position: 50% 35%; }
+      .info-precios { display: flex; font-size: 1.5rem; gap: 0px !important;  }
+      .precio-regular.tachado {
+      text-decoration: line-through;
+      color: #aaa;
+      margin-right: 1em;
+      
+    }
+    .precio-oferta {
+      color: var(--primary);
+      font-weight: 700;
+      gap: 2px !important;
+    }
+    .precio-normal {
+      color: var(--primary-2);
+      gap: 2px !important;
+    }
+
+    .add-to-cart-form {
+      display: flex;
+      flex-direction: column; /* En móvil, todo uno debajo de otro para evitar errores de clic */
+      gap: 10px;
+      width: 100%;
+    }
+
+    .btn-primary {
+      order: 1; 
+      padding: 15px;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 1.1rem;
+    }
+
+    .btn-white {
+      order: 2;
+      padding: 12px;
+      border: 1px solid #ccc;
+      font-size: 0.9rem;
+      opacity: 0.8; 
+    }
+      
+
+    @media (max-width: 412px) {
+      .titulo-producto { font-size: 1.5rem; }
+      .img-placeholder { height: 180px; }
+      #related-container { grid-template-columns: 1fr; }
+      .descripcion { font-size: 0.96rem; }
+      .precio-regular.tachado {
+      text-decoration: line-through;
+      color: #aaa;
+      margin-right: 1em;
+      
+    }
+    .precio-oferta {
+      color: var(--primary);
+      font-weight: 700;
+      gap: 2px !important;
+    }
+    .precio-normal {
+      color: var(--primary-2);
+      gap: 2px !important;
+    }
+    }
+
+    @media (max-width: 375px) {
+      .detalle-producto { padding: 10px; }
+      .titulo-producto { font-size: 1.35rem; }
+      .info-precios { font-size: 1.05rem; gap: 4px !important;}
+    }
+
+    @media (max-width: 360px) {
+      .titulo-producto { font-size: 1.25rem; }
+      .descripcion { font-size: 0.94rem; }
+      .img-placeholder { height: 160px; }
+    }
+
+    @media (max-width: 320px) {
+      .titulo-producto { font-size: 1.1rem; }
+      .detalle-producto { padding: 8px; }
+    }
+  
+ </style>
 </MainLayout>

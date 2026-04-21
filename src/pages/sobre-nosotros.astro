@@ -11,7 +11,7 @@ import { GraduationCap, Handshake, LifeBuoy, UserCheck, BriefcaseMedical, Shield
       <span class="about-shape about-shape-orb"></span>
     </div>
 
-    <section class="about-hero section" aria-label="Hero Sobre Nosotros">
+    <section class="about-hero full-bleed" aria-label="Hero Sobre Nosotros">
       <img src="/nosotros-uno.webp" alt="Pablo Ortiz en entorno clinico" class="about-hero-bg" />
       <div class="about-hero-overlay"></div>
       <div class="about-hero-content">
@@ -135,19 +135,16 @@ import { GraduationCap, Handshake, LifeBuoy, UserCheck, BriefcaseMedical, Shield
 <style>
   @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 
-  .pt-32 {
-    padding-top: 3.5rem;
-  }
+
 
   .about-page {
     position: relative;
     isolation: isolate;
     display: grid;
     gap: 30px;
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
-    margin-bottom: -14px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto 0 auto;
     padding-bottom: 0;
     overflow: hidden;
   }
@@ -222,9 +219,9 @@ import { GraduationCap, Handshake, LifeBuoy, UserCheck, BriefcaseMedical, Shield
     min-height: 520px;
     overflow: hidden;
     border-radius: 0;
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
     box-shadow: none;
   }
 
@@ -591,7 +588,11 @@ import { GraduationCap, Handshake, LifeBuoy, UserCheck, BriefcaseMedical, Shield
 
     .about-text-zone + .values-banner,
     .values-banner + .about-benefits,
-    .about-benefits + .about-block {
+    .about-benefits {
+      margin-top: 14px;
+    }
+
+    .about-block {
       margin-top: 14px;
     }
 
@@ -665,6 +666,13 @@ import { GraduationCap, Handshake, LifeBuoy, UserCheck, BriefcaseMedical, Shield
     .about-hero h1 {
       font-size: clamp(1.45rem, 7.4vw, 2rem);
       line-height: 1.2;
+    }
+
+    .about-intro-title {
+      font-size: clamp(1.4rem, 6.2vw, 1.9rem);
+      font-weight: 600;
+      justify-items: center;
+      text-align: center;
     }
 
     .about-lead {

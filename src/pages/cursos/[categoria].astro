@@ -1,0 +1,51 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import CourseCard from '../../components/CourseCard.astro';
+import { courses as serverCourses } from '../../data/cursos';
+
+export async function getStaticPaths() {
+  // Pre-render pages for known categories (from dataset)
+  const slugs = Array.from(new Set(serverCourses.flatMap((c) => c.categories || [])));
+  return slugs.map((slug) => ({ params: { categoria: slug } }));
+}
+
+const categoria = String(Astro.params.categoria || '').toLowerCase().trim();
+const products = serverCourses.filter((c) => Array.isArray(c.categories) && c.categories.map((s) => String(s).toLowerCase().trim()).includes(categoria));
+
+// Human-friendly title: replace hyphens and capitalize words
+function humanize(slug) {
+  return String(slug || '')
+    .replace(/[-_]+/g, ' ')
+    .split(' ')
+    .filter(Boolean)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
+const humanTitle = humanize(categoria) || 'Categoría';
+---
+
+<MainLayout title={`Cursos - ${humanTitle}`}>
+  <section style="max-width:1200px;margin:2.6rem auto;padding:18px;">
+    <header style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px;">
+      <div>
+        <p class="eyebrow">Cursos</p>
+        <h1 style="margin:6px 0 0 0;color: var(--title);">{humanTitle}</h1>
+        <p style="color:var(--muted);max-width:60ch;margin-top:8px;">Listado de cursos.</p>
+      </div>
+    </header>
+
+    <div class="grid">
+      {products && products.length ? (
+        products.map((c) => (
+          <CourseCard curso={{ ...c, href: c.href || `/producto/${c.slug}` }} />
+        ))
+      ) : (
+        <p>No hay cursos en esta categoría.</p>
+      )}
+    </div>
+  </section>
+
+  <style>
+    .grid { display:grid; gap:18px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  </style>
+</MainLayout>

@@ -1,0 +1,48 @@
+---
+// Backup of src/pages/index.astro before component extraction / modifications
+// If anything breaks, restore this file to revert Home to the validated state.
+
+import MainLayout from "../layouts/MainLayout.astro";
+
+const masVendidos = [
+    {
+    titulo: "CrioLipo",
+    href: "/producto/criolipo-2",
+    image: "/criolipo.webp",
+    imagePosition: "center",
+    wide: true,
+  },
+  {
+    titulo: "Criolipólisis de placa",
+    href: "/producto/criolipolisis-de-placa",
+    image: "/criolipolisis-de-placa.webp",
+    imagePosition: "center",
+    wide: false,
+  },
+];
+
+const cursos = [
+    {
+    titulo: "CrioLipo",
+    tituloMedia: "CrioLipo",
+    image: "/1-curso.webp",
+    descripcion: "Curso criolipotratamiento avanzado para reducción de tejido graso localizado.",
+    precioAnterior: "$600.000",
+    precioActual: "$450.000",
+    tieneOferta: true,
+    href: "/producto/criolipo-2",
+  },
+  // ... (rest of original courses)
+];
+
+const heroTags = [
+  { label: "Criolipolisis", dark: false },
+  { label: "Reduccion corporal", dark: false },
+  { label: "Tratamientos faciales avanzados", dark: false },
+  { label: "Depilacion laser", dark: false },
+];
+---
+
+<MainLayout title="Backup - Home">
+  <!-- Backup file, not used by the site. -->
+</MainLayout>

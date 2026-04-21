@@ -1,0 +1,85 @@
+---
+// Reusable course card — mirrors the markup/styles used in Home
+const { curso, variant = 'default' } = Astro.props;
+const title = curso.title ?? curso.titulo ?? curso.slug;
+const desc = (curso.description ?? curso.descripcion ?? '').replace(/(<([^>]+)>)/gi, '').slice(0,140);
+const price = curso.price ?? '';
+const isFeatured = !!curso.featured;
+---
+
+<a class={`card course-card ${variant === 'compact' ? 'compact' : ''}`} href={curso.href || `/producto/${curso.slug}`}>
+  <div class="media">
+    {curso.image ? <img src={curso.image} alt={title} loading="lazy" /> : <div class="img-placeholder">Sin imagen</div>}
+    {isFeatured ? <span class="pill">Destacado</span> : null}
+  </div>
+  <div class="card-body">
+    <div class="title-wrap"><h3>{title}</h3></div>
+    <div class="desc-wrap"><p class="muted desc">{desc}</p></div>
+
+    <div class="meta-actions">
+      <div class="price-wrap">{price ? <span class="price">{price}</span> : null}</div>
+      <div class="cta-wrap">
+        <span class="btn btn-soft">Ver curso</span>
+      </div>
+    </div>
+    <!-- featured pill is rendered as overlay inside .media to avoid affecting flow -->
+  </div>
+</a>
+
+<style>
+  .course-card { text-decoration:none; color:var(--text); background:var(--surface); padding:12px; border-radius:12px; box-shadow:var(--shadow); display:block; }
+  .course-card.compact { background: linear-gradient(180deg, rgba(112,79,230,0.04), rgba(112,79,230,0.02)); padding:10px; }
+  /* Center price and CTA visually */
+  .course-card .price-wrap { display:flex; align-items:center; justify-content:center; }
+  .course-card .cta-wrap { display:flex; align-items:center; justify-content:center; }
+  .course-card .media { overflow:hidden; border-radius:8px; position:relative; }
+  .course-card .media img { width:100%; height:160px; object-fit:cover; display:block; transform-origin:center center; transition:transform 320ms cubic-bezier(.2,.9,.2,1); }
+  .course-card .img-placeholder { height:160px; background:#f2f2f6; display:grid; place-items:center; color:#999; border-radius:8px; }
+  .course-card { transition: transform 260ms cubic-bezier(.2,.9,.2,1), box-shadow 260ms cubic-bezier(.2,.9,.2,1); }
+  .course-card .card-body { padding-top:10px; display:flex; flex-direction:column; gap:8px; }
+  .course-card h3 { margin:0; font-size:1.05rem; line-height:1.2; display:block; max-height:3.6em; overflow:hidden; }
+  .course-card .desc { margin:0;color:var(--muted);font-size:.95rem; min-height:2.6em; max-height:3.6em; overflow:hidden; }
+
+  /* Keep title and description blocks fixed height so cards align */
+  .course-card .title-wrap { min-height:3.6em; display:flex; align-items:flex-start; }
+  .course-card .desc-wrap { min-height:3.6em; }
+
+  .course-card .meta-actions { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:6px; }
+  .course-card .price { font-weight:700;color:var(--primary); display:block; text-align:center; }
+  .course-card .cta-wrap { display:flex; justify-content:center; align-items:center; }
+
+  .course-card .pill { background:var(--primary); color:#fff; padding:6px 8px;border-radius:999px;font-size:0.78rem;font-weight:700; display:inline-block; margin-top:8px; }
+  .course-card .media .pill { position:absolute; top:10px; right:10px; z-index:3; }
+  .course-card.compact .pill { padding:4px 6px;font-size:0.72rem; }
+  .course-card.compact .btn { padding:6px 8px;font-size:0.85rem; }
+
+  /* Hover / focus animation: elevate card and slightly zoom image to increase perceived interactivity */
+  .course-card:hover, .course-card:focus-within { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(43,29,95,0.14); }
+  .course-card:hover .media img, .course-card:focus-within .media img { transform: scale(1.04); }
+  /* Compact variant: smaller, subtler hover */
+  .course-card.compact:hover, .course-card.compact:focus-within { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(43,29,95,0.10); }
+  .course-card.compact:hover .media img, .course-card.compact:focus-within .media img { transform: scale(1.02); }
+
+  @media (max-width:520px){ 
+    .course-card .media img, 
+    .course-card .img-placeholder { height:120px; } 
+  }
+
+  /* Tighter card spacing for small mobile screens */
+  @media (max-width:480px) {
+    .course-card { padding: 8px !important; border-radius: 10px; }
+    .course-card .card-body { padding-top: 8px !important; gap: 6px !important; }
+    .course-card .title-wrap { min-height: 2.2em !important; }
+    .course-card .desc-wrap { min-height: 1.6em !important; }
+    .course-card .desc { min-height: 1.6em; font-size: 0.94rem; }
+    .course-card .meta-actions { margin-top: 6px !important; gap: 6px !important; }
+    .course-card .price { font-size: 0.98rem; }
+    .course-card .cta-wrap { justify-content: flex-end !important; }
+    .course-card .btn { padding: 8px 12px !important; font-size: 0.92rem !important; }
+  }
+
+  /* Respect user preference for reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .course-card, .course-card .media img { transition: none !important; transform: none !important; }
+  }
+</style>
