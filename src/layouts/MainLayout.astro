@@ -1,6 +1,17 @@
 ---
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
+// Importar Plus Jakarta Sans
+import "@fontsource/plus-jakarta-sans"; 
+import "@fontsource/plus-jakarta-sans/700.css";
+
+// Importar DM Sans
+import "@fontsource/dm-sans"; 
+import "@fontsource/dm-sans/500.css";
+
+// Importar Work Sans
+import "@fontsource/work-sans";
+
 
 const { title = "Cursos de Estetica" } = Astro.props;
 ---
@@ -44,6 +55,7 @@ const { title = "Cursos de Estetica" } = Astro.props;
     --primary-2: #896af2;
     --danger: #c0392b;
     --text: #221b38;
+    --text-cursos: #5a5270; 
     --muted: #665f81;
     --surface: #ffffff;
     --line: #e9e4f8;
