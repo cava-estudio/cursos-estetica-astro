@@ -12,7 +12,7 @@ export async function getStaticPaths() {
     'cursos-presencial-online',
   ];
 
-  const ENDPOINT = 'https://cursosdeestetica.cl/graphql';
+  const ENDPOINT = 'https://pago.cursosdeestetica.cl/graphql';
   const results = await Promise.all(prerenderSlugs.map(async (slug) => {
     try {
       const query = `query ProductsByCategory($slug: ID!) { products(first: 200, where: {status: \"publish\"}) { nodes { name slug shortDescription image { sourceUrl altText } productCategories { nodes { slug } } } } }`;

@@ -8,7 +8,7 @@ export const GET: APIRoute = async ({ request }) => {
     const page = parseInt(url.searchParams.get('page') || '1', 10) || 1;
     const perPage = parseInt(url.searchParams.get('perPage') || '12', 10) || 12;
 
-    const ENDPOINT = 'https://cursosdeestetica.cl/graphql';
+    const ENDPOINT = 'https://pago.cursosdeestetica.cl/graphql';
     const query = `query AllProducts { products(first: 500, where: {status: \"publish\"}) { nodes { name slug shortDescription image { sourceUrl altText } productCategories { nodes { slug name } } productTags { nodes { slug name } } } } }`;
 
     const res = await fetch(ENDPOINT, {

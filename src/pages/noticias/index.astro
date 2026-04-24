@@ -2,7 +2,7 @@
 import MainLayout from '../../layouts/MainLayout.astro';
 
 export async function getStaticProps() {
-  const ENDPOINT = 'https://cursosdeestetica.cl/graphql';
+  const ENDPOINT = 'https://pago.cursosdeestetica.cl/graphql';
   let posts = [];
   try {
     const res = await fetch(ENDPOINT, {

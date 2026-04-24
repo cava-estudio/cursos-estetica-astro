@@ -4,7 +4,7 @@ import CourseCard from '../../components/CourseCard.astro';
 import QtyControl from '../../components/QtyControl.astro';
 
 export async function getStaticPaths() {
-  const ENDPOINT = 'https://cursosdeestetica.cl/graphql';
+  const ENDPOINT = 'https://pago.cursosdeestetica.cl/graphql';
   // 1) Traer todos los slugs
   let slugs = [];
   try {
@@ -161,7 +161,7 @@ const { product, error } = Astro.props;
 
         // Fallback: query WPGraphQL for products in the same category
         try {
-          const ENDPOINT = 'https://cursosdeestetica.cl/graphql';
+          const ENDPOINT = 'https://pago.cursosdeestetica.cl/graphql';
           const q = `query AllProductsForRelated { products(first: 200, where: {status: \"publish\"}) { nodes { slug name image { sourceUrl } productCategories { nodes { slug } } } } }`;
           const res = await fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ query: q }) });
           const json = await res.json();
