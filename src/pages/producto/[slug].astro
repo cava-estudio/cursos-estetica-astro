@@ -1,6 +1,5 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
-import CourseCard from '../../components/CourseCard.astro';
 import QtyControl from '../../components/QtyControl.astro';
 
 export async function getStaticPaths() {
@@ -322,10 +321,14 @@ const { product, error } = Astro.props;
             // Use the native submit to avoid re-triggering JS handlers
             // DEBUG: Ver URL final
             const finalURL = new URL(form.action);
-            const params = new URLSearchParams(new FormData(form));
+            const formData = new FormData(form);
+            const params = new URLSearchParams();
+            for (let [key, value] of formData.entries()) {
+              params.append(key, value);
+            }
             finalURL.search = params.toString();
-            console.log('URL final:', finalURL.toString());
-            form.submit();
+            console.log('URL final con parámetros:', finalURL.toString());
+            window.location.href = finalURL.toString();
 
             // If navigation doesn't happen (some handler prevented it), restore after MAX_WAIT_MS
             fallbackTimer = setTimeout(() => {
