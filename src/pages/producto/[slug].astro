@@ -229,7 +229,7 @@ const { product, error } = Astro.props;
         })();
   </script>
 
-  +  <!-- <script type="module">
+  <script type="module">
     // Intercept submit on the add-to-cart form to show an accessible modal/toast
     (function () {
       const DELAY_MS = 2000; // Visible duration before continuing to submit
@@ -286,6 +286,15 @@ const { product, error } = Astro.props;
       }
 
       form.addEventListener('submit', function (e) {
+        // DEBUG: Ver qué se está enviando
+      console.log('=== DEBUG CARRITO ===');
+      const formData = new FormData(form);
+      console.log('Action:', form.action);
+      console.log('Method:', form.method);
+      for (let [key, value] of formData.entries()) {
+        console.log(key + ':', value);
+      }
+      console.log('=== FIN DEBUG ===');
         // Always intercept the submit to show feedback; final submission uses form.submit()
         if (submitting) {
           e.preventDefault();
@@ -311,6 +320,11 @@ const { product, error } = Astro.props;
         setTimeout(() => {
           try {
             // Use the native submit to avoid re-triggering JS handlers
+            // DEBUG: Ver URL final
+            const finalURL = new URL(form.action);
+            const params = new URLSearchParams(new FormData(form));
+            finalURL.search = params.toString();
+            console.log('URL final:', finalURL.toString());
             form.submit();
 
             // If navigation doesn't happen (some handler prevented it), restore after MAX_WAIT_MS
@@ -328,7 +342,7 @@ const { product, error } = Astro.props;
         }, DELAY_MS);
       }, { passive: false });
     })();
-  +  </script> -->
+  </script>
 
   <style>
     /* Cart modal / toast styles */
