@@ -320,15 +320,12 @@ const { product, error } = Astro.props;
           try {
             // Use the native submit to avoid re-triggering JS handlers
             // DEBUG: Ver URL final
-            const finalURL = new URL(form.action);
-            const formData = new FormData(form);
-            const params = new URLSearchParams();
-            for (let [key, value] of formData.entries()) {
-              params.append(key, value);
-            }
-            finalURL.search = params.toString();
-            console.log('URL final con parámetros:', finalURL.toString());
-            window.location.href = finalURL.toString();
+            // Construir URL manualmente desde los inputs del form
+            const productId = form.querySelector('[name="add-to-cart"]').value;
+            const qty = form.querySelector('[name="quantity"]').value || '1';
+            const finalURL = `${form.action}?add-to-cart=${productId}&quantity=${qty}`;
+            console.log('URL final construida:', finalURL);
+            window.location.href = finalURL;
 
             // If navigation doesn't happen (some handler prevented it), restore after MAX_WAIT_MS
             fallbackTimer = setTimeout(() => {
